@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "codewave-backend"
+version = "0.1.0"
+description = "CodeWave backend services"
+authors = ["Hardy <hardy@codewave.com>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.109.0"
+sqlalchemy = "^2.0.25"
+alembic = "^1.13.1"
+redis = "^5.0.1"
+pydantic = "^2.5.3"
+opentelemetry-api = "^1.21.0"
+opentelemetry-sdk = "^1.21.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+black = "^23.12.1"
+isort = "^5.13.2"
+mypy = "^1.8.0"
+ruff = "^0.1.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3 

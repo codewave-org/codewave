@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     APP_PORT: int = 8000
     APP_HOST: str = "0.0.0.0"
     APP_BASE_URL: str = "http://localhost:8000"
-    APP_SECRET_KEY: str
+    APP_SECRET_KEY: str = "your-secret-key-for-development"
 
     # 数据库配置
     DB_DRIVER: str = "postgresql+asyncpg"
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     API_OPENAPI_URL: str = "/openapi.json"
 
     # JWT 配置
-    JWT_SECRET_KEY: str
+    JWT_SECRET_KEY: str = "your-jwt-secret-key-for-development"
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7

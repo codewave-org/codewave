@@ -1,18 +1,18 @@
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+"""Database session configuration."""
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from apps.core.config import settings
 
-engine = create_async_engine(
+engine = create_engine(
     settings.database_url,
     echo=settings.DB_ECHO,
-    pool_size=settings.DB_POOL_SIZE,
-    max_overflow=settings.DB_MAX_OVERFLOW,
-    pool_timeout=settings.DB_POOL_TIMEOUT,
+    connect_args={"check_same_thread": False} if settings.DB_DRIVER == "sqlite" else {},
 )
 
-AsyncSessionLocal = async_sessionmaker(
+SessionLocal = sessionmaker(
     bind=engine,
     autocommit=False,
     autoflush=False,
-    expire_on_commit=False,
 ) 

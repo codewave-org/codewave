@@ -2,7 +2,6 @@
 
 from typing import Optional
 
-from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,47 +14,17 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     DEBUG: bool = False
 
-    # Security
-    SECRET_KEY: str = "your-secret-key"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
-    ALGORITHM: str = "HS256"
-
     # Database
-    POSTGRES_SERVER: str = "localhost"
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "postgres"
-    POSTGRES_DB: str = "codewave"
-    POSTGRES_PORT: str = "5432"
-    DATABASE_URL: Optional[PostgresDsn] = None
+    DB_DRIVER: str = "sqlite"
+    DB_PATH: str = "./data/codewave.db"
+    DB_ECHO: bool = True
 
     @property
-    def sync_database_url(self) -> str:
-        """Get synchronous database URL."""
-        return str(
-            PostgresDsn.build(
-                scheme="postgresql",
-                username=self.POSTGRES_USER,
-                password=self.POSTGRES_PASSWORD,
-                host=self.POSTGRES_SERVER,
-                port=int(self.POSTGRES_PORT),
-                path=self.POSTGRES_DB,
-            )
-        )
-
-    @property
-    def async_database_url(self) -> str:
-        """Get asynchronous database URL."""
-        return str(
-            PostgresDsn.build(
-                scheme="postgresql+asyncpg",
-                username=self.POSTGRES_USER,
-                password=self.POSTGRES_PASSWORD,
-                host=self.POSTGRES_SERVER,
-                port=int(self.POSTGRES_PORT),
-                path=self.POSTGRES_DB,
-            )
-        )
+    def database_url(self) -> str:
+        """Get database URL."""
+        if self.DB_DRIVER == "sqlite":
+            return f"sqlite:///{self.DB_PATH}"
+        raise ValueError(f"Unsupported database driver: {self.DB_DRIVER}")
 
     model_config = SettingsConfigDict(
         env_file=".env",

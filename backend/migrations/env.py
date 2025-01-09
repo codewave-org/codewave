@@ -15,7 +15,6 @@ sys.path.append(project_dir)
 
 # Import all models to ensure they are registered with SQLAlchemy
 from packages.models import Base  # noqa: E402
-from packages.models.user import Permission, Role, RolePermission, User, UserRole  # noqa: E402
 from packages.models.test import TestModel  # noqa: E402
 from apps.core.config import settings  # noqa: E402
 
@@ -26,7 +25,7 @@ print("Loaded models:", Base.metadata.tables.keys())
 config = context.config
 
 # 设置数据库 URL
-db_url = settings.sync_database_url
+db_url = settings.database_url
 print("Using database URL:", db_url)
 config.set_main_option("sqlalchemy.url", db_url)
 

@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.testclient import TestClient
 
 from apps.main import app
-from tests.conftest import client
 
 @pytest.fixture
 def client() -> TestClient:
@@ -16,10 +15,9 @@ def client() -> TestClient:
     return TestClient(app)
 
 @pytest.fixture
-async def async_client(client: TestClient) -> AsyncGenerator[AsyncClient, None]:
+async def async_client(client: TestClient) -> AsyncClient:
     """Create an async client for testing."""
-    async with AsyncClient(base_url=client.base_url) as ac:
-        yield ac
+    return AsyncClient(app=app, base_url="http://test")
 
 @pytest.fixture
 def api_url() -> Callable[[str], str]:

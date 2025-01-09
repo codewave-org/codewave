@@ -13,9 +13,9 @@ class TestExampleAPI(BaseAPITest):
     """Test example API endpoints."""
 
     @pytest.fixture(autouse=True)
-    async def setup(self, async_client: AsyncGenerator[AsyncClient, None]):
+    async def setup(self, async_client: AsyncClient):
         """Set up test client."""
-        self.client = await anext(async_client)
+        self.client = async_client
 
     async def test_health_check(self) -> None:
         """Test health check endpoint."""

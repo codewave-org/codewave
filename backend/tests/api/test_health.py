@@ -2,7 +2,6 @@
 import pytest
 from httpx import AsyncClient
 from starlette.testclient import TestClient
-from typing import AsyncGenerator
 
 
 def test_health_check_sync(client: TestClient):
@@ -13,9 +12,8 @@ def test_health_check_sync(client: TestClient):
 
 
 @pytest.mark.asyncio
-async def test_health_check_async(async_client: AsyncGenerator[AsyncClient, None]):
+async def test_health_check_async(async_client: AsyncClient):
     """Test health check endpoint asynchronously."""
-    client = await anext(async_client)
-    response = await client.get("/health")
+    response = await async_client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"} 

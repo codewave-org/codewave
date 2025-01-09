@@ -43,8 +43,7 @@ codewave/
 
 ### 后端
 - FastAPI
-- PostgreSQL 15+
-- Redis Stack
+- SQLite
 - SQLAlchemy 2.0
 - Alembic
 - OpenTelemetry
@@ -59,8 +58,7 @@ codewave/
 ### 后端要求
 - Python >= 3.10
 - Poetry
-- PostgreSQL 15+
-- Redis Stack
+- SQLite 3
 
 ## 快速开始
 
@@ -89,7 +87,7 @@ pnpm dev
 
 # 后端开发服务器
 cd ../backend
-poetry run uvicorn app.main:app --reload
+poetry run uvicorn apps.main:app --reload
 ```
 
 ## 核心功能

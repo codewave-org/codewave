@@ -17,16 +17,8 @@ sqlalchemy = "^2.0.27"
 alembic = "^1.13.1"
 pydantic = "^2.6.1"
 pydantic-settings = "^2.1.0"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = ">=0.0.10"
-redis = "^5.0.1"
-opentelemetry-api = "^1.23.0"
-opentelemetry-sdk = "^1.23.0"
-opentelemetry-instrumentation-fastapi = "^0.44b0"
-opentelemetry-exporter-otlp = "^1.23.0"
 starlette = ">=0.37.2"
-pyjwt = {version = ">=2.8.0", extras = ["crypto"]}
-psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"

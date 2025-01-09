@@ -7,9 +7,7 @@ CodeWave 项目的后端服务。
 - FastAPI
 - SQLAlchemy 2.0
 - Alembic
-- OpenTelemetry
-- Redis
-- PostgreSQL
+- SQLite
 
 ## 项目结构
 
@@ -17,6 +15,7 @@ CodeWave 项目的后端服务。
 backend/
 ├── apps/          # 应用程序
 ├── packages/      # 共享包
+├── data/          # 数据文件
 ├── pyproject.toml # Poetry 配置
 ├── poetry.lock    # 依赖锁定文件
 └── .env.example   # 环境变量示例
@@ -38,7 +37,13 @@ poetry install
 poetry shell
 ```
 
-3. 运行开发服务器
+3. 初始化数据库
+```bash
+mkdir -p data
+alembic upgrade head
+```
+
+4. 运行开发服务器
 ```bash
 uvicorn apps.main:app --reload
 ```

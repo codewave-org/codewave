@@ -160,6 +160,45 @@ git branch -d feat/your-feature-name
 2. 出现冲突时，与相关开发者讨论解决方案
 3. 解决冲突后，重新运行测试和代码质量检查
 
+### 依赖管理
+1. 添加新依赖时：
+```bash
+# 添加生产依赖
+poetry add package-name
+
+# 添加开发依赖
+poetry add -D package-name
+
+# 更新 lock 文件
+poetry lock
+
+# 安装所有依赖
+poetry install
+```
+
+2. 修改 `pyproject.toml` 后：
+```bash
+# 更新 lock 文件
+poetry lock
+
+# 验证依赖安装
+poetry install
+
+# 确保虚拟环境在项目目录下
+poetry config virtualenvs.in-project true
+```
+
+3. 提交依赖更改：
+   - 同时提交 `pyproject.toml` 和 `poetry.lock`
+   - 使用 `build:` 作为提交类型
+   - 在提交信息中说明依赖变更原因
+
+示例：
+```bash
+git add pyproject.toml poetry.lock
+git commit -m "build: add flake8 for code quality checks"
+```
+
 ## 常见问题
 
 ### Q: 如何处理紧急修复？
@@ -176,3 +215,23 @@ A: 按以下步骤处理：
 1. 运行 `black` 和 `isort` 自动修复格式问题
 2. 使用 `ruff --fix` 修复可自动修复的问题
 3. 对于其他问题，查看错误信息并手动修复 
+
+### Q: Poetry 依赖问题怎么处理？
+A: 按以下步骤处理：
+1. 确保 poetry 配置正确：
+   ```bash
+   poetry config virtualenvs.in-project true
+   ```
+2. 更新 lock 文件：
+   ```bash
+   poetry lock
+   ```
+3. 重新安装依赖：
+   ```bash
+   poetry install
+   ```
+4. 如果还有问题，尝试清理并重新安装：
+   ```bash
+   rm -rf .venv
+   poetry install
+   ``` 

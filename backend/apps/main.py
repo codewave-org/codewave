@@ -31,4 +31,9 @@ async def root():
 
 @app.get("/api/v1/test/")
 async def test():
-    return {"message": "Hello from CodeWave!"} 
+    return {"message": "Hello from CodeWave!"}
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "ok"} 

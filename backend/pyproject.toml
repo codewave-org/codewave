@@ -26,6 +26,7 @@ opentelemetry-instrumentation-fastapi = "^0.44b0"
 opentelemetry-exporter-otlp = "^1.23.0"
 starlette = ">=0.37.2"
 pyjwt = {version = ">=2.8.0", extras = ["crypto"]}
+psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"

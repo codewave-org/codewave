@@ -1,9 +1,10 @@
 """API testing configuration and fixtures."""
 
+from typing import Any, AsyncGenerator, Callable
+
 import pytest
-from typing import AsyncGenerator, Callable, Any
-from httpx import AsyncClient
 from fastapi import FastAPI
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from apps.main import app

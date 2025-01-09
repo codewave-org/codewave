@@ -1,17 +1,18 @@
-import os
-import pytest
 import asyncio
-from typing import AsyncGenerator, Generator, Any
+import os
+from typing import Any, AsyncGenerator, Generator
+
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import (
-    AsyncSession,
-    create_async_engine,
-    async_sessionmaker,
     AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
 )
 
-from apps.main import app
 from apps.db.base import Base
+from apps.main import app
 
 # Test database URL
 TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "sqlite+aiosqlite:///./test.db")

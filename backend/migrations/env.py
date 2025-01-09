@@ -5,7 +5,7 @@ import sys
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import create_engine, pool, URL, MetaData
+from sqlalchemy import URL, MetaData, create_engine, pool
 from sqlalchemy.engine import Connection
 
 # Add the project root directory to the Python path
@@ -13,10 +13,11 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(current_dir)
 sys.path.append(project_dir)
 
+from apps.core.config import settings  # noqa: E402
+
 # Import all models to ensure they are registered with SQLAlchemy
 from packages.models import Base  # noqa: E402
 from packages.models.test import TestModel  # noqa: E402
-from apps.core.config import settings  # noqa: E402
 
 print("Loaded models:", Base.metadata.tables.keys())
 

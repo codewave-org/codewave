@@ -1,6 +1,7 @@
 """Base class for API tests."""
 
 from typing import Any, Optional
+
 import pytest
 from httpx import AsyncClient, Response
 from sqlalchemy.ext.asyncio import AsyncSession

@@ -12,9 +12,8 @@ def test_health_check_sync(client: TestClient):
 
 
 @pytest.mark.asyncio
-async def test_health_check_async(client: TestClient):
+async def test_health_check_async(async_client: AsyncClient):
     """Test health check endpoint asynchronously."""
-    async with AsyncClient(base_url="http://localhost:8000", follow_redirects=True) as ac:
-        response = await ac.get("/health")
-        assert response.status_code == 200
-        assert response.json() == {"status": "ok"} 
+    response = await async_client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"} 

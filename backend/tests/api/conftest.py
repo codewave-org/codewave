@@ -12,7 +12,7 @@ from tests.conftest import client
 @pytest.fixture
 def async_client(client) -> AsyncClient:
     """Create an async client for testing."""
-    return AsyncClient(app=client.app, base_url="http://test")
+    return AsyncClient(app=app, base_url="http://test")
 
 @pytest.fixture
 def api_url() -> Callable[[str], str]:

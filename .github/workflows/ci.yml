@@ -28,12 +28,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install Poetry
-      run: |
-        uses: snok/install-poetry@v1
-        with:
-          version: 2.0.0
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+      uses: snok/install-poetry@v1
+      with:
+        version: 2.0.0
+        virtualenvs-create: true
+        virtualenvs-in-project: true
 
     - name: Install pnpm
       uses: pnpm/action-setup@v2
@@ -45,7 +44,7 @@ jobs:
       run: |
         poetry config virtualenvs.in-project true
         poetry install --no-interaction
-        poetry run pip install httpx
+        poetry run pip install httpx pytest-asyncio
 
     - name: Install frontend dependencies
       working-directory: ./frontend
@@ -54,8 +53,11 @@ jobs:
 
     - name: Run backend tests
       working-directory: ./backend
+      env:
+        TEST_DATABASE_URL: sqlite+aiosqlite:///./test.db
+        PYTHONPATH: ${{ github.workspace }}/backend
       run: |
-        poetry run pytest tests/ -v
+        poetry run pytest tests/ -v --asyncio-mode=auto
 
     - name: Run frontend tests
       working-directory: ./frontend
@@ -64,5 +66,8 @@ jobs:
 
     - name: Run API tests
       working-directory: ./backend
+      env:
+        TEST_DATABASE_URL: sqlite+aiosqlite:///./test.db
+        PYTHONPATH: ${{ github.workspace }}/backend
       run: |
-        poetry run pytest tests/api/ -v 
+        poetry run pytest tests/api/ -v --asyncio-mode=auto

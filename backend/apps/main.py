@@ -21,6 +21,7 @@ app.add_middleware(
     allow_credentials=True,
 )
 
+
 @app.get("/")
 async def root():
     return {
@@ -29,11 +30,13 @@ async def root():
         "environment": settings.APP_ENV,
     }
 
+
 @app.get("/api/v1/test")
 async def test():
     return {"message": "Hello from CodeWave!"}
 
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
-    return {"status": "ok"} 
+    return {"status": "ok"}

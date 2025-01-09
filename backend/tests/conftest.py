@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
     create_async_engine,
     async_sessionmaker,
-    AsyncEngine
+    AsyncEngine,
 )
 
 from apps.main import app
@@ -18,9 +18,7 @@ TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "sqlite+aiosqlite:///./test.d
 
 # Create async engine for tests
 engine: AsyncEngine = create_async_engine(
-    TEST_DATABASE_URL,
-    echo=True,
-    connect_args={"check_same_thread": False}
+    TEST_DATABASE_URL, echo=True, connect_args={"check_same_thread": False}
 )
 
 # Create async session factory
@@ -29,8 +27,9 @@ async_session_factory = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
     autocommit=False,
-    autoflush=False
+    autoflush=False,
 )
+
 
 async def get_test_db() -> AsyncGenerator[AsyncSession, None]:
     """Get test database session."""
@@ -39,6 +38,7 @@ async def get_test_db() -> AsyncGenerator[AsyncSession, None]:
             yield session
         finally:
             await session.close()
+
 
 @pytest.fixture(scope="session")
 async def test_db_setup() -> AsyncGenerator[None, None]:
@@ -50,6 +50,7 @@ async def test_db_setup() -> AsyncGenerator[None, None]:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
+
 @pytest.fixture
 async def db_session(test_db_setup) -> AsyncGenerator[AsyncSession, None]:
     """Create a fresh database session for each test."""
@@ -59,10 +60,12 @@ async def db_session(test_db_setup) -> AsyncGenerator[AsyncSession, None]:
         finally:
             await session.close()
 
+
 @pytest.fixture
 def client() -> TestClient:
     """Create a test client."""
     return TestClient(app)
+
 
 @pytest.fixture
 def test_user() -> dict[str, str]:
@@ -70,5 +73,5 @@ def test_user() -> dict[str, str]:
     return {
         "username": "testuser",
         "email": "test@example.com",
-        "password": "testpassword123"
-    } 
+        "password": "testpassword123",
+    }

@@ -115,4 +115,4 @@ class BaseAPITest:
         data = response.json()
         assert "error" in data
         if expected_message:
-            assert data["error"] == expected_message 
+            assert data["error"] == expected_message

@@ -44,6 +44,7 @@ for table_name, table in target_metadata.tables.items():
     for column in table.columns:
         print(f"    - {column.name}: {column.type}")
 
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
@@ -83,7 +84,7 @@ def run_migrations_online() -> None:
                 include_schemas=True,
                 render_as_batch=True,
                 transaction_per_migration=True,
-                include_object=lambda obj, name, type_, reflected, compare_to: True
+                include_object=lambda obj, name, type_, reflected, compare_to: True,
             )
 
             with context.begin_transaction():
@@ -100,4 +101,4 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     print("Running migrations online")
-    run_migrations_online() 
+    run_migrations_online()

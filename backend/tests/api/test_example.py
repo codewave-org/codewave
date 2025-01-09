@@ -42,4 +42,4 @@ class TestExampleAPI(BaseAPITest):
     async def test_nonexistent_endpoints(self, path: str, expected_status: int) -> None:
         """Test accessing nonexistent endpoints."""
         response = await self.client.get(path)
-        self.assert_status(response, expected_status) 
+        self.assert_status(response, expected_status)

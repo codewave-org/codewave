@@ -50,4 +50,4 @@ class SoftDeleteMixin:
     @property
     def is_deleted(self) -> bool:
         """Check if the record is soft deleted."""
-        return self.deleted_at is not None 
+        return self.deleted_at is not None

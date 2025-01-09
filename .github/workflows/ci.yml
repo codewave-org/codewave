@@ -44,7 +44,7 @@ jobs:
       run: |
         poetry config virtualenvs.in-project true
         poetry install --no-interaction
-        poetry run pip install httpx pytest-asyncio
+        poetry run pip install "httpx==0.24.1" pytest-asyncio
 
     - name: Install frontend dependencies
       working-directory: ./frontend

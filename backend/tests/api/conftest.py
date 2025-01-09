@@ -8,13 +8,12 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from apps.main import app
-from tests.conftest import client
 
 
 @pytest.fixture
-def async_client(client) -> AsyncClient:
-    """Create an async client for testing."""
-    return AsyncClient(app=app, base_url="http://test")
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    async with AsyncClient(app=app, base_url="http://test") as client:
+        yield client
 
 
 @pytest.fixture

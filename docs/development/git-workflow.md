@@ -11,11 +11,13 @@
 - 文档分支：`docs/<文档描述>`
 - 重构分支：`refactor/<重构描述>`
 - 性能优化：`perf/<优化描述>`
+- 代码风格：`style/<描述>`
 
 ### 分支保护
 - main 分支受保护，不允许直接推送
 - 所有更改必须通过 Pull Request 进行
 - 需要至少一个审查者批准才能合并
+- CI 检查必须通过才能合并
 
 ## 开发流程
 
@@ -37,6 +39,20 @@ git checkout -b feat/your-feature-name
 # 查看文件状态
 git status
 
+# 运行测试
+cd backend
+poetry run pytest tests/ -v
+
+# 运行代码质量检查
+poetry run black . --check  # 检查代码格式
+poetry run isort . --check  # 检查导入排序
+poetry run ruff check .     # 检查代码质量
+
+# 如果有问题，自动修复
+poetry run black .     # 格式化代码
+poetry run isort .     # 修复导入排序
+poetry run ruff . --fix  # 修复可自动修复的问题
+
 # 添加更改
 git add <文件名>     # 添加特定文件
 git add .          # 添加所有更改
@@ -56,12 +72,14 @@ git commit -m "type: commit message"
 - refactor: 代码重构
 - test: 测试相关
 - chore: 构建过程或辅助工具的变动
+- perf: 性能优化
 
 示例：
 ```
 feat: add user authentication
 fix: resolve database connection issue
 docs: update API documentation
+style: format code with black and isort
 ```
 
 ### 4. 创建 Pull Request
@@ -75,6 +93,7 @@ git push -u origin feat/your-feature-name
    - 提供详细的描述
    - 选择合适的审查者
    - 关联相关的 Issue（如果有）
+   - 确保 CI 检查通过
 
 PR 描述模板：
 ```markdown
@@ -87,13 +106,19 @@ PR 描述模板：
 - 架构改动说明
 
 ## Testing
-- [ ] 测试项目 1
-- [ ] 测试项目 2
+- [ ] 单元测试通过
+- [ ] 集成测试通过
+- [ ] API 测试通过
+- [ ] 代码质量检查通过
+  - [ ] black 格式化检查
+  - [ ] isort 导入排序检查
+  - [ ] ruff 代码质量检查
 ```
 
 ### 5. 代码审查
 - 等待审查者反馈
 - 根据反馈进行修改
+- 确保所有 CI 检查通过
 - 获得批准后合并
 
 ### 6. 完成功能
@@ -113,17 +138,27 @@ git branch -d feat/your-feature-name
 ### 提交建议
 1. 保持提交粒度适中，每个提交专注于一个改动
 2. 提供清晰的提交信息
-3. 在提交前进行自我代码审查
+3. 在提交前运行测试和代码质量检查
+4. 代码格式问题应该在单独的 commit 中修复
 
 ### 分支管理
 1. 定期同步主分支的更新
 2. 及时删除已合并的功能分支
 3. 避免长期维护的功能分支
+4. 代码格式调整使用 `style/` 分支
+
+### 代码质量检查
+1. 在提交前运行所有检查
+2. 优先使用自动修复功能
+3. 对于无法自动修复的问题：
+   - 仔细阅读错误信息
+   - 参考文档进行手动修复
+   - 必要时与团队讨论
 
 ### 冲突处理
 1. 经常与主分支同步，减少冲突
 2. 出现冲突时，与相关开发者讨论解决方案
-3. 解决冲突后，仔细测试功能
+3. 解决冲突后，重新运行测试和代码质量检查
 
 ## 常见问题
 
@@ -134,4 +169,10 @@ A: 创建 `fix/` 分支，修复后优先处理该 PR。
 A: 使用 `git commit --amend` 修改最后一次提交信息。
 
 ### Q: 如何撤销已推送的提交？
-A: 谨慎使用 `git revert`，避免使用 `git reset` 强制推送。 
+A: 谨慎使用 `git revert`，避免使用 `git reset` 强制推送。
+
+### Q: 代码质量检查失败怎么办？
+A: 按以下步骤处理：
+1. 运行 `black` 和 `isort` 自动修复格式问题
+2. 使用 `ruff --fix` 修复可自动修复的问题
+3. 对于其他问题，查看错误信息并手动修复 

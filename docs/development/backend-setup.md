@@ -6,15 +6,13 @@
 
 - Python >= 3.10
 - Poetry >= 2.0.0
-- PostgreSQL >= 15.0
-- Redis >= 7.0
+- SQLite >= 3.0
 
 ## 开发工具
 
 - FastAPI
 - SQLAlchemy
 - Alembic
-- OpenTelemetry
 - 代码质量工具：
   - Black
   - isort
@@ -57,17 +55,12 @@ poetry install
 
 ### 3. 数据库配置
 ```bash
-# 安装 PostgreSQL
-brew install postgresql@15
+# SQLite 通常已经预装在大多数系统中
+# 创建数据目录
+mkdir -p data
 
-# 启动服务
-brew services start postgresql@15
-
-# 安装 Redis
-brew install redis
-
-# 启动服务
-brew services start redis
+# 初始化数据库
+poetry run alembic upgrade head
 ```
 
 ## IDE 配置指南
@@ -77,6 +70,7 @@ brew services start redis
    - Python
    - Pylance
    - Python Test Explorer
+   - SQLite Viewer（推荐，用于查看数据库内容）
 
 2. 配置 Python 解释器
    - 打开命令面板 (Cmd + Shift + P)
@@ -111,7 +105,7 @@ brew services start redis
 
 4. 环境变量配置
    - 复制 `.env.example` 为 `.env`
-   - 根据需要修改环境变量，特别是敏感信息如密钥和密码
+   - 根据需要修改环境变量，特别是敏感信息如密钥和密码、数据库路径等配置
 
 ### 解决导入问题
 如果在 VS Code 中，Python 解释器无法解析导入，请按照以下步骤进行排查：
@@ -178,6 +172,7 @@ poetry run ruff check .
 backend/
 ├── apps/          # 应用程序
 ├── packages/      # 共享包
+├── data/          # 数据文件（包含 SQLite 数据库）
 ├── pyproject.toml # Poetry 配置
 ├── poetry.lock    # 依赖锁定文件
 └── .env.example   # 环境变量示例
@@ -196,7 +191,7 @@ backend/
 - 使用 Pydantic 进行数据验证
 
 ### 数据库
-- 使用 SQLAlchemy 2.0 异步 API
+- 使用 SQLAlchemy 2.0 API
 - 使用 Alembic 进行数据库迁移
 - 遵循数据库设计最佳实践
 
@@ -222,7 +217,9 @@ poetry run alembic upgrade head
 ```
 
 ### Q: 如何处理环境变量？
-A: 复制 `.env.example` 文件为 `.env`，并根据需要修改配置。 
+A: 复制 `.env.example` 文件为 `.env`，并根据需要修改配置。主要配置项包括：
+- `DB_DRIVER`: sqlite
+- `DB_PATH`: ./data/codewave.db
 
 ### Q: 导入问题
 A: 如果遇到 "无法解析导入" 的问题：
@@ -238,12 +235,12 @@ A: 如果找不到虚拟环境：
 3. 使用 `poetry env info` 查看环境信息
 4. 必要时可以删除 `.venv` 目录重新安装
 
-### Q: 数据库连接问题
-A: 如果无法连接数据库：
-1. 检查数据库服务是否运行
-2. 验证环境变量配置
-3. 确认数据库用户权限
-4. 检查网络连接和防火墙设置
+### Q: 数据库问题
+A: 如果遇到数据库问题：
+1. 确保 `data` 目录存在且有写入权限
+2. 检查 SQLite 数据库文件是否正确创建
+3. 验证环境变量中的数据库路径配置
+4. 如果数据库损坏，可以删除数据库文件并重新运行迁移
 
 ### Q: 环境配置修改后不生效怎么办？
 A: 当修改了 Poetry 配置或重新安装环境后，可能需要重新加载环境变量：

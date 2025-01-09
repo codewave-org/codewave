@@ -27,4 +27,8 @@ async def root():
         "name": settings.APP_NAME,
         "version": settings.API_VERSION,
         "environment": settings.APP_ENV,
-    } 
+    }
+
+@app.get("/api/v1/test/")
+async def test():
+    return {"message": "Hello from CodeWave!"} 

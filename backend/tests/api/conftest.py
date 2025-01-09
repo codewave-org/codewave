@@ -4,6 +4,7 @@ from collections.abc import AsyncGenerator, Callable
 from typing import Any
 
 import pytest
+from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,9 +12,16 @@ from apps.main import app
 
 
 @pytest.fixture
-def async_client(client) -> AsyncClient:
+def client() -> TestClient:
+    """Create a client for testing."""
+    return TestClient(app)
+
+
+@pytest.fixture
+async def async_client() -> AsyncGenerator[AsyncClient, None]:
     """Create an async client for testing."""
-    return AsyncClient(app=app, base_url="http://test")
+    async with AsyncClient(app=app, base_url="http://test") as client:
+        yield client
 
 
 @pytest.fixture

@@ -3,7 +3,8 @@
 from typing import Any
 
 import pytest
-from httpx import AsyncClient, Response
+from fastapi.testclient import TestClient
+from httpx import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -13,18 +14,18 @@ class BaseAPITest:
     @pytest.fixture(autouse=True)
     def _setup_client(
         self,
-        async_client: AsyncClient,
+        client: TestClient,
         api_url: Any,
         auth_headers: dict[str, str],
         db_session: AsyncSession,
     ) -> None:
         """Set up test environment."""
-        self.client = async_client
+        self.client = client
         self.api_url = api_url
         self.auth_headers = auth_headers
         self.db = db_session
 
-    async def get(
+    def get(
         self,
         path: str,
         *,
@@ -33,13 +34,13 @@ class BaseAPITest:
     ) -> Response:
         """Send GET request."""
         headers = self.auth_headers if authenticated else {}
-        return await self.client.get(
+        return self.client.get(
             self.api_url(path),
             headers=headers,
             params=params,
         )
 
-    async def post(
+    def post(
         self,
         path: str,
         *,
@@ -48,13 +49,13 @@ class BaseAPITest:
     ) -> Response:
         """Send POST request."""
         headers = self.auth_headers if authenticated else {}
-        return await self.client.post(
+        return self.client.post(
             self.api_url(path),
             headers=headers,
             json=json,
         )
 
-    async def put(
+    def put(
         self,
         path: str,
         *,
@@ -63,13 +64,13 @@ class BaseAPITest:
     ) -> Response:
         """Send PUT request."""
         headers = self.auth_headers if authenticated else {}
-        return await self.client.put(
+        return self.client.put(
             self.api_url(path),
             headers=headers,
             json=json,
         )
 
-    async def delete(
+    def delete(
         self,
         path: str,
         *,
@@ -77,12 +78,12 @@ class BaseAPITest:
     ) -> Response:
         """Send DELETE request."""
         headers = self.auth_headers if authenticated else {}
-        return await self.client.delete(
+        return self.client.delete(
             self.api_url(path),
             headers=headers,
         )
 
-    async def patch(
+    def patch(
         self,
         path: str,
         *,
@@ -91,7 +92,7 @@ class BaseAPITest:
     ) -> Response:
         """Send PATCH request."""
         headers = self.auth_headers if authenticated else {}
-        return await self.client.patch(
+        return self.client.patch(
             self.api_url(path),
             headers=headers,
             json=json,

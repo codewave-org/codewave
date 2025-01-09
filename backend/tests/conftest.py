@@ -52,7 +52,7 @@ async def test_db_setup() -> AsyncGenerator[None, None]:
 
 
 @pytest.fixture
-async def db_session(test_db_setup) -> AsyncGenerator[AsyncSession, None]:
+async def db_session(test_db_setup: None) -> AsyncGenerator[AsyncSession, None]:
     """Create a fresh database session for each test."""
     async with async_session_factory() as session:
         try:

@@ -1,3 +1,5 @@
+"""Main application module."""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,7 +14,7 @@ app = FastAPI(
     openapi_url=settings.API_OPENAPI_URL,
 )
 
-# 配置 CORS
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -23,7 +25,8 @@ app.add_middleware(
 
 
 @app.get("/")
-async def root():
+async def root() -> dict[str, str]:
+    """Root endpoint."""
     return {
         "name": settings.APP_NAME,
         "version": settings.API_VERSION,
@@ -32,11 +35,12 @@ async def root():
 
 
 @app.get("/api/v1/test")
-async def test():
+async def test_endpoint() -> dict[str, str]:
+    """Test endpoint."""
     return {"message": "Hello from CodeWave!"}
 
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> dict[str, str]:
     """Health check endpoint."""
     return {"status": "ok"}

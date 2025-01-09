@@ -16,9 +16,10 @@ def client() -> TestClient:
     return TestClient(app)
 
 @pytest.fixture
-def async_client(client: TestClient) -> AsyncClient:
+async def async_client(client: TestClient) -> AsyncGenerator[AsyncClient, None]:
     """Create an async client for testing."""
-    return AsyncClient(app=app, base_url=client.base_url)
+    async with AsyncClient(base_url=client.base_url) as ac:
+        yield ac
 
 @pytest.fixture
 def api_url() -> Callable[[str], str]:

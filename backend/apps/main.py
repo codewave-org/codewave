@@ -29,7 +29,7 @@ async def root():
         "environment": settings.APP_ENV,
     }
 
-@app.get("/api/v1/test/")
+@app.get("/api/v1/test")
 async def test():
     return {"message": "Hello from CodeWave!"}
 

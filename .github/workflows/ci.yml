@@ -37,26 +37,27 @@ jobs:
         version: 8
 
     - name: Install backend dependencies
-      working-directory: ./backend
+      working-directory: ./codewave/backend
       run: |
         poetry install
+        poetry run pip install httpx
 
     - name: Install frontend dependencies
-      working-directory: ./frontend
+      working-directory: ./codewave/frontend
       run: |
         pnpm install
 
     - name: Run backend tests
-      working-directory: ./backend
+      working-directory: ./codewave/backend
       run: |
         poetry run pytest tests/ -v
 
     - name: Run frontend tests
-      working-directory: ./frontend
+      working-directory: ./codewave/frontend
       run: |
         pnpm test
 
     - name: Run API tests
-      working-directory: ./backend
+      working-directory: ./codewave/backend
       run: |
         poetry run pytest tests/api/ -v 

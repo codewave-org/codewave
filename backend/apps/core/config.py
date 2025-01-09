@@ -1,7 +1,5 @@
 """Application configuration."""
 
-from typing import Optional, List
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -38,9 +36,9 @@ class Settings(BaseSettings):
     DB_ECHO: bool = True
 
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
-    CORS_METHODS: List[str] = ["*"]
-    CORS_HEADERS: List[str] = ["*"]
+    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_METHODS: list[str] = ["*"]
+    CORS_HEADERS: list[str] = ["*"]
 
     @property
     def database_url(self) -> str:
@@ -56,4 +54,4 @@ class Settings(BaseSettings):
     )
 
 
-settings = Settings() 
+settings = Settings()

@@ -51,6 +51,22 @@ jobs:
       run: |
         pnpm install
 
+    - name: Check backend code quality
+      working-directory: ./backend
+      run: |
+        poetry run black . --check
+        poetry run isort . --check
+        poetry run flake8 .
+        poetry run mypy .
+        poetry run ruff check .
+
+    - name: Check frontend code quality
+      working-directory: ./frontend
+      run: |
+        pnpm lint
+        pnpm type-check
+        pnpm prettier:check
+
     - name: Run backend tests
       working-directory: ./backend
       env:

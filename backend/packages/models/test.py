@@ -12,4 +12,4 @@ class TestModel(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "test_model"
 
     name: Mapped[str] = mapped_column(String(50), nullable=False)
-    description: Mapped[str] = mapped_column(String(200)) 
+    description: Mapped[str] = mapped_column(String(200))

@@ -71,6 +71,12 @@ exclude = [
     '.venv/',
     '__pycache__/',
 ]
+# 允许重复的模块名
+allow_redefinition = true
+# 将测试目录标记为命名空间包
+namespace_packages = true
+# 显式指定包基础
+explicit_package_bases = true
 
 [tool.ruff]
 line-length = 100

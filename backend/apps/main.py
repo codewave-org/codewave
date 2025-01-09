@@ -1,7 +1,12 @@
+"""Main application module."""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse
 
-from apps.core.config import settings
+from apps.core.config import get_settings
+
+settings = get_settings()
 
 app = FastAPI(
     title=settings.API_TITLE,
@@ -12,31 +17,35 @@ app = FastAPI(
     openapi_url=settings.API_OPENAPI_URL,
 )
 
-# 配置 CORS
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
     allow_methods=settings.CORS_METHODS,
     allow_headers=settings.CORS_HEADERS,
-    allow_credentials=True,
 )
 
 
 @app.get("/")
-async def root():
-    return {
-        "name": settings.APP_NAME,
-        "version": settings.API_VERSION,
-        "environment": settings.APP_ENV,
-    }
-
-
-@app.get("/api/v1/test")
-async def test():
-    return {"message": "Hello from CodeWave!"}
+async def root() -> JSONResponse:
+    """Root endpoint."""
+    return JSONResponse(
+        {
+            "name": settings.PROJECT_NAME,
+            "version": settings.VERSION,
+            "environment": settings.APP_ENV,
+        }
+    )
 
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> JSONResponse:
     """Health check endpoint."""
-    return {"status": "ok"}
+    return JSONResponse({"status": "ok"})
+
+
+@app.get("/api/v1/test")
+async def test_endpoint() -> JSONResponse:
+    """Test endpoint."""
+    return JSONResponse({"message": "Hello from CodeWave!"})

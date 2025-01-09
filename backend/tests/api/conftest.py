@@ -5,14 +5,20 @@ from typing import AsyncGenerator, Callable, Any
 from httpx import AsyncClient
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.testclient import TestClient
 
 from apps.main import app
 from tests.conftest import client
 
 @pytest.fixture
+def client() -> TestClient:
+    """Create a test client."""
+    return TestClient(app)
+
+@pytest.fixture
 def async_client(client) -> AsyncClient:
     """Create an async client for testing."""
-    return AsyncClient(app=client.app, base_url="http://test")
+    return AsyncClient(base_url="http://test", follow_redirects=True)
 
 @pytest.fixture
 def api_url() -> Callable[[str], str]:

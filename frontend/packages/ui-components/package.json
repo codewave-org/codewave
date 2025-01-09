@@ -11,7 +11,10 @@
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
         "lint": "eslint \"src/**/*.{ts,tsx}\"",
-        "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix"
+        "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+        "type-check": "tsc --noEmit",
+        "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+        "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
     },
     "dependencies": {
         "react": "^18.2.0",

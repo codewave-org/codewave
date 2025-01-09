@@ -81,12 +81,6 @@ explicit_package_bases = true
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "B", "I", "N", "UP", "PL", "RUF"]
-ignore = []
-
-# 忽略特定目录
 exclude = [
     ".git",
     ".venv",
@@ -94,4 +88,11 @@ exclude = [
     "build",
     "dist",
     "migrations",
-] 
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "N", "UP", "PL", "RUF"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"migrations/*" = ["UP", "E", "F", "B", "I", "N", "PL", "RUF"] 

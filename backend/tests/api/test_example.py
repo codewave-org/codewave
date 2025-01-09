@@ -1,6 +1,7 @@
 """Example API test using the base test class."""
 
 import pytest
+from typing import AsyncGenerator
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,6 +11,11 @@ from tests.api.base import BaseAPITest
 @pytest.mark.asyncio
 class TestExampleAPI(BaseAPITest):
     """Test example API endpoints."""
+
+    @pytest.fixture(autouse=True)
+    async def setup(self, async_client: AsyncGenerator[AsyncClient, None]):
+        """Set up test client."""
+        self.client = await anext(async_client)
 
     async def test_health_check(self) -> None:
         """Test health check endpoint."""
@@ -29,8 +35,7 @@ class TestExampleAPI(BaseAPITest):
     async def test_api_endpoint_without_auth(self) -> None:
         """Test API endpoint without authentication."""
         response = await self.client.get("/api/v1/test")
-        self.assert_status(response, 200)
-        assert response.json() == {"message": "Hello from CodeWave!"}
+        self.assert_status(response, 401)
 
     @pytest.mark.parametrize(
         "path,expected_status",

@@ -77,3 +77,6 @@ backend/.cache/
 
 # Poetry
 poetry.toml
+
+# Turbo
+.turbo/

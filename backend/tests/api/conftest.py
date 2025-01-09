@@ -18,7 +18,7 @@ def client() -> TestClient:
 @pytest.fixture
 def async_client(client) -> AsyncClient:
     """Create an async client for testing."""
-    return AsyncClient(base_url="http://test", follow_redirects=True)
+    return AsyncClient(base_url="http://localhost:8000", follow_redirects=True)
 
 @pytest.fixture
 def api_url() -> Callable[[str], str]:

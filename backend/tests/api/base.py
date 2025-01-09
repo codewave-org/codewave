@@ -1,6 +1,6 @@
 """Base class for API tests."""
 
-from typing import Any, Optional
+from typing import Any
 
 import pytest
 from httpx import AsyncClient, Response
@@ -29,7 +29,7 @@ class BaseAPITest:
         path: str,
         *,
         authenticated: bool = True,
-        params: Optional[dict[str, Any]] = None,
+        params: dict[str, Any] | None = None,
     ) -> Response:
         """Send GET request."""
         headers = self.auth_headers if authenticated else {}
@@ -44,7 +44,7 @@ class BaseAPITest:
         path: str,
         *,
         authenticated: bool = True,
-        json: Optional[dict[str, Any]] = None,
+        json: dict[str, Any] | None = None,
     ) -> Response:
         """Send POST request."""
         headers = self.auth_headers if authenticated else {}
@@ -59,7 +59,7 @@ class BaseAPITest:
         path: str,
         *,
         authenticated: bool = True,
-        json: Optional[dict[str, Any]] = None,
+        json: dict[str, Any] | None = None,
     ) -> Response:
         """Send PUT request."""
         headers = self.auth_headers if authenticated else {}
@@ -87,7 +87,7 @@ class BaseAPITest:
         path: str,
         *,
         authenticated: bool = True,
-        json: Optional[dict[str, Any]] = None,
+        json: dict[str, Any] | None = None,
     ) -> Response:
         """Send PATCH request."""
         headers = self.auth_headers if authenticated else {}
@@ -109,7 +109,7 @@ class BaseAPITest:
         self,
         response: Response,
         expected_status: int,
-        expected_message: Optional[str] = None,
+        expected_message: str | None = None,
     ) -> None:
         """Assert error response."""
         self.assert_status(response, expected_status)

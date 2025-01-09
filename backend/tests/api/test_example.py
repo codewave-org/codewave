@@ -1,8 +1,6 @@
 """Example API test using the base test class."""
 
 import pytest
-from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from tests.api.base import BaseAPITest
 

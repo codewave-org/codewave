@@ -1,9 +1,11 @@
-"""Version information tests."""
+"""Version tests."""
+
+import sys
+
+from tests.constants import PYTHON_MAJOR_VERSION, PYTHON_MINOR_VERSION
 
 
-def test_python_version():
-    """Test Python version is 3.10.x."""
-    import sys
-
-    assert sys.version_info.major == 3
-    assert sys.version_info.minor == 10
+def test_python_version() -> None:
+    """Test Python version."""
+    assert sys.version_info.major == PYTHON_MAJOR_VERSION
+    assert sys.version_info.minor == PYTHON_MINOR_VERSION

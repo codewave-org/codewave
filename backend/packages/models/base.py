@@ -1,7 +1,6 @@
 """Base model for all database models."""
 
 from datetime import datetime
-from typing import Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, func
@@ -41,7 +40,7 @@ class UUIDMixin:
 class SoftDeleteMixin:
     """Mixin to add soft delete support to models."""
 
-    deleted_at: Mapped[Optional[datetime]] = mapped_column(
+    deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
         default=None,

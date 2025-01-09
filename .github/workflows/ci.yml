@@ -28,8 +28,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install Poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python3 -
+      uses: snok/install-poetry@v1
+      with:
+        version: 2.0.0
+        virtualenvs-create: true
+        virtualenvs-in-project: true
 
     - name: Install pnpm
       uses: pnpm/action-setup@v2
@@ -39,7 +42,8 @@ jobs:
     - name: Install backend dependencies
       working-directory: ./codewave/backend
       run: |
-        poetry install
+        poetry config virtualenvs.in-project true
+        poetry install --no-interaction
         poetry run pip install httpx
 
     - name: Install frontend dependencies

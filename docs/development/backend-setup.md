@@ -142,7 +142,7 @@ brew services start redis
 poetry shell
 
 # 启动服务
-uvicorn main:app --reload
+uvicorn apps.main:app --reload
 ```
 
 ### 2. 运行测试

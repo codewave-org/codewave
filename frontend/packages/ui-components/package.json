@@ -2,19 +2,17 @@
     "name": "@codewave/ui-components",
     "version": "0.1.0",
     "private": true,
-    "main": "./src/index.ts",
-    "types": "./src/index.ts",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
     "scripts": {
         "build": "tsup",
+        "clean": "rm -rf dist",
         "dev": "tsup --watch",
-        "test": "jest",
-        "test:watch": "jest --watch",
-        "test:coverage": "jest --coverage",
         "lint": "eslint \"src/**/*.{ts,tsx}\"",
         "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
-        "type-check": "tsc --noEmit",
-        "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-        "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
+        "test": "NODE_NO_WARNINGS=1 jest",
+        "type-check": "tsc --noEmit"
     },
     "dependencies": {
         "react": "^18.2.0",

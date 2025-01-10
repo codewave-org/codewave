@@ -176,7 +176,7 @@ describe('VersionRepository', () => {
         // 新增：测试生成版本号时的错误处理
         it('should handle errors during version number generation', async () => {
             const error = new Error('Failed to generate version number');
-            jest.spyOn(repository as any, 'findLatestVersion').mockRejectedValueOnce(error);
+            jest.spyOn(repository as VersionRepository, 'findLatestVersion').mockRejectedValueOnce(error);
 
             const versionData = {
                 snippet_id: '123e4567-e89b-12d3-a456-426614174000',
@@ -401,10 +401,12 @@ describe('VersionRepository', () => {
         });
 
         it('should handle non-Zod validation errors in create', async () => {
-            // 模拟非 Zod 验证错误
-            jest
-                .spyOn(repository as any, 'calculateHash')
-                .mockRejectedValueOnce(new Error('Hash calculation failed'));
+            // 模拟 crypto.subtle.digest 失败
+            const originalSubtle = crypto.subtle;
+            // @ts-expect-error: 模拟 crypto.subtle
+            crypto.subtle = {
+                digest: () => Promise.reject(new Error('Hash calculation failed')),
+            };
 
             await expect(
                 repository.create({
@@ -413,10 +415,13 @@ describe('VersionRepository', () => {
                     metadata: {
                         changes: [],
                         size: 100,
-                        hash: 'test-hash',
                     },
                 })
             ).rejects.toThrow(DatabaseError);
+
+            // 恢复原始的 crypto.subtle
+            // @ts-expect-error: 恢复 crypto.subtle
+            crypto.subtle = originalSubtle;
         });
     });
 

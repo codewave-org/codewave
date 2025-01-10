@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from apps.core.config import settings
+from apps.core.docs import custom_openapi
 
 app = FastAPI(
     title=settings.API_TITLE,
@@ -23,10 +24,21 @@ app.add_middleware(
     allow_credentials=True,
 )
 
+# Configure custom OpenAPI
+app.openapi = custom_openapi
 
-@app.get("/")
+
+@app.get("/", tags=["root"])
 async def root() -> dict[str, str]:
-    """Root endpoint."""
+    """
+    Root endpoint.
+
+    Returns:
+        dict: Basic application information
+            - name: Application name
+            - version: API version
+            - environment: Current environment
+    """
     return {
         "name": settings.APP_NAME,
         "version": settings.API_VERSION,
@@ -34,13 +46,25 @@ async def root() -> dict[str, str]:
     }
 
 
-@app.get("/api/v1/test")
+@app.get("/api/v1/test", tags=["test"])
 async def test_endpoint() -> dict[str, str]:
-    """Test endpoint."""
+    """
+    Test endpoint.
+
+    Returns:
+        dict: A simple test message
+            - message: Welcome message
+    """
     return {"message": "Hello from CodeWave!"}
 
 
-@app.get("/health")
+@app.get("/health", tags=["health"])
 async def health_check() -> dict[str, str]:
-    """Health check endpoint."""
+    """
+    Health check endpoint.
+
+    Returns:
+        dict: Service health status
+            - status: Current health status (ok/error)
+    """
     return {"status": "ok"}

@@ -13,7 +13,9 @@ class TestExampleAPI(BaseAPITest):
         """Test health check endpoint."""
         response = self.client.get("/health")
         self.assert_status(response, HTTP_200_OK)
-        assert response.json() == {"status": "ok"}
+        data = response.json()
+        assert data["status"] == "ok"
+        assert "version" in data
 
     def test_root_endpoint(self) -> None:
         """Test root endpoint."""

@@ -6,7 +6,7 @@
     "types": "./src/index.ts",
     "scripts": {
         "build": "tsc",
-        "test": "jest --coverage --coverageReporters=json --coverageReporters=lcov --coverageReporters=text",
+        "test": "NODE_NO_WARNINGS=1 jest --coverage --coverageReporters=json --coverageReporters=lcov --coverageReporters=text",
         "lint": "eslint src --ext .ts,.tsx",
         "lint:fix": "eslint src --ext .ts,.tsx --fix",
         "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",

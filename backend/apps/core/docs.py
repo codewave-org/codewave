@@ -1,13 +1,13 @@
 """API documentation configuration."""
 
-from typing import Any, Dict
+from typing import Any
 
 from fastapi.openapi.utils import get_openapi
 
 from apps.core.config import settings
 
 
-def custom_openapi() -> Dict[str, Any]:
+def custom_openapi() -> dict[str, Any]:
     """Generate custom OpenAPI schema."""
     if not settings.openapi_schema:
         openapi_schema = get_openapi(
@@ -41,9 +41,7 @@ def custom_openapi() -> Dict[str, Any]:
         )
 
         # Custom documentation settings
-        openapi_schema["info"]["x-logo"] = {
-            "url": "https://example.com/logo.png"
-        }
+        openapi_schema["info"]["x-logo"] = {"url": "https://example.com/logo.png"}
 
         # Security schemes
         openapi_schema["components"] = {
@@ -58,4 +56,4 @@ def custom_openapi() -> Dict[str, Any]:
 
         settings.openapi_schema = openapi_schema
 
-    return settings.openapi_schema 
+    return settings.openapi_schema

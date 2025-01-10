@@ -1,6 +1,6 @@
 """Application configuration."""
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     API_DOCS_URL: str = "/docs"
     API_REDOC_URL: str = "/redoc"
     API_OPENAPI_URL: str = "/openapi.json"
-    openapi_schema: Optional[Dict[str, Any]] = None
+    openapi_schema: dict[str, Any] | None = None
 
     # Database
     DB_DRIVER: str = "sqlite"

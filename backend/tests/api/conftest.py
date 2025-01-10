@@ -20,7 +20,7 @@ def client() -> TestClient:
 @pytest.fixture
 async def async_client() -> AsyncGenerator[AsyncClient, None]:
     """Create an async client for testing."""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(base_url="http://localhost:8000") as client:
         yield client
 
 

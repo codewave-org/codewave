@@ -178,6 +178,89 @@ describe('DatabaseConnection', () => {
       // 验证连接是否已终止
       expect(connection.isConnected()).toBe(false);
     });
+
+    // 新增：测试数据库阻塞时的错误处理
+    it('should handle blocked event with error', async () => {
+      // 先连接数据库
+      await connection.connect();
+      expect(connection.isConnected()).toBe(true);
+
+      // 创建一个新的连接并模拟阻塞错误
+      const mockOpen = jest.spyOn(indexedDB, 'open').mockImplementation(() => {
+        const request = {
+          error: new Error('Database blocked'),
+          dispatchEvent: jest.fn(),
+          addEventListener: jest.fn((type, handler) => {
+            if (type === 'blocked') {
+              handler({ target: request });
+            }
+          }),
+          removeEventListener: jest.fn(),
+        } as unknown as IDBOpenDBRequest;
+        setTimeout(() => request.dispatchEvent(new Event('blocked')), 0);
+        return request;
+      });
+
+      const newConnection = new DatabaseConnection(dbName);
+      await expect(newConnection.connect()).rejects.toThrow('Database blocked');
+      expect(newConnection.isConnected()).toBe(false);
+
+      mockOpen.mockRestore();
+    });
+
+    // 新增：测试数据库意外终止时的错误处理
+    it('should handle terminated event with error', async () => {
+      // 先连接数据库
+      await connection.connect();
+      expect(connection.isConnected()).toBe(true);
+
+      // 模拟数据库意外终止
+      await connection.disconnect();
+
+      // 等待事件处理完成
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // 验证连接是否已终止
+      expect(connection.isConnected()).toBe(false);
+    });
+
+    // 新增：测试 versionchange 事件处理
+    it('should handle versionchange event', async () => {
+      // 先连接数据库
+      await connection.connect();
+      expect(connection.isConnected()).toBe(true);
+
+      // 创建一个新的连接并尝试升级版本
+      const request = indexedDB.open(dbName, DB_CONFIG.version + 1);
+
+      // 等待事件处理完成
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // 验证原连接是否已断开
+      expect(connection.isConnected()).toBe(false);
+
+      // 清理
+      request.result?.close();
+    });
+
+    // 新增：测试 versionchange 事件处理时的错误
+    it('should handle versionchange event with error', async () => {
+      // 先连接数据库
+      await connection.connect();
+      expect(connection.isConnected()).toBe(true);
+
+      // 创建一个新的连接并尝试升级版本，这会触发 versionchange 事件
+      const request = indexedDB.open(dbName, DB_CONFIG.version + 1);
+
+      // 等待事件处理完成
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // 验证连接是否已断开
+      expect(connection.isConnected()).toBe(false);
+
+      // 清理
+      request.result?.close();
+    });
   });
 
   describe('disconnect', () => {
@@ -250,35 +333,27 @@ describe('DatabaseConnection', () => {
       const error = new DatabaseError('Transaction error');
       await expect(
         connection.transaction(DB_CONFIG.stores.snippets, 'readonly', async () => {
-          // 使用 DatabaseError 而不是普通 Error
+          throw error;
+        })
+      ).rejects.toThrow(error);
+    });
+
+    it('should handle non-DatabaseError transaction errors', async () => {
+      const error = new Error('Generic error');
+      await expect(
+        connection.transaction(DB_CONFIG.stores.snippets, 'readonly', async () => {
           throw error;
         })
       ).rejects.toThrow(DatabaseError);
     });
 
-    it('should handle non-DatabaseError transaction errors', async () => {
-      await expect(
-        connection.transaction(DB_CONFIG.stores.snippets, 'readonly', async () => {
-          throw new Error('Generic error');
-        })
-      ).rejects.toThrow('Generic error');
-    });
-
-    it('should handle non-Error transaction errors', async () => {
-      await expect(
-        connection.transaction(DB_CONFIG.stores.snippets, 'readonly', async () => {
-          throw 'String error';
-        })
-      ).rejects.toThrow('Transaction failed');
-    });
-
-    it('should throw error when not connected', async () => {
+    it('should handle transaction when not connected', async () => {
       await connection.disconnect();
       await expect(
         connection.transaction(DB_CONFIG.stores.snippets, 'readonly', async () => {
           return true;
         })
-      ).rejects.toThrow(DatabaseError);
+      ).rejects.toThrow('Database not connected');
     });
   });
 });

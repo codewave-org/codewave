@@ -1,5 +1,5 @@
 import { DatabaseError, NotFoundError, ValidationError } from '../../../core/errors';
-import { Snippet } from '../../../core/types';
+import { Snippet, SnippetSchema } from '../../../core/types';
 import { DatabaseConnection } from '../../connection';
 import { SnippetRepository } from '../snippet';
 
@@ -86,6 +86,38 @@ describe('SnippetRepository', () => {
 
       await expect(repository.create(invalidData)).rejects.toThrow(ValidationError);
     });
+
+    // 新增：测试数据库错误处理
+    it('should handle database errors during creation', async () => {
+      // 模拟数据库错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+      const snippetData = {
+        title: 'Test Snippet',
+        content: 'console.log("Hello World");',
+        language: 'javascript',
+        tags: ['test'],
+      };
+
+      await expect(repository.create(snippetData)).rejects.toThrow(DatabaseError);
+    });
+
+    // 新增：测试非 Zod 错误的处理
+    it('should handle non-Zod validation errors', async () => {
+      const error = new Error('Custom validation error');
+      jest.spyOn(SnippetSchema, 'parse').mockImplementationOnce(() => {
+        throw error;
+      });
+
+      const snippetData = {
+        title: 'Test Snippet',
+        content: 'console.log("Hello World");',
+        language: 'javascript',
+        tags: ['test'],
+      };
+
+      await expect(repository.create(snippetData)).rejects.toThrow(error);
+    });
   });
 
   describe('update', () => {
@@ -137,6 +169,28 @@ describe('SnippetRepository', () => {
         repository.update(existingSnippet.id, { title: '' }) // 标题不能为空
       ).rejects.toThrow(ValidationError);
     });
+
+    // 新增：测试数据库错误处理
+    it('should handle database errors during update', async () => {
+      // 模拟数据库错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+      await expect(repository.update(existingSnippet.id, { title: 'New Title' })).rejects.toThrow(
+        DatabaseError
+      );
+    });
+
+    // 新增：测试非 Zod 错误的处理
+    it('should handle non-Zod validation errors during update', async () => {
+      const error = new Error('Custom validation error');
+      jest.spyOn(SnippetSchema, 'parse').mockImplementationOnce(() => {
+        throw error;
+      });
+
+      await expect(repository.update(existingSnippet.id, { title: 'New Title' })).rejects.toThrow(
+        error
+      );
+    });
   });
 
   describe('delete', () => {
@@ -162,6 +216,14 @@ describe('SnippetRepository', () => {
     it('should throw NotFoundError for non-existent snippet', async () => {
       const nonExistentId = 'non-existent-id';
       await expect(repository.delete(nonExistentId)).rejects.toThrow(NotFoundError);
+    });
+
+    // 新增：测试数据库错误处理
+    it('should handle database errors during deletion', async () => {
+      // 模拟数据库错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+      await expect(repository.delete(existingSnippet.id)).rejects.toThrow(DatabaseError);
     });
   });
 
@@ -201,6 +263,14 @@ describe('SnippetRepository', () => {
         const result = await repository.findById('non-existent-id');
         expect(result).toBeNull();
       });
+
+      // 新增：测试数据库错误处理
+      it('should handle database errors during findById', async () => {
+        // 模拟数据库错误
+        jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+        await expect(repository.findById('some-id')).rejects.toThrow(DatabaseError);
+      });
     });
 
     describe('findAll', () => {
@@ -208,6 +278,14 @@ describe('SnippetRepository', () => {
         const results = await repository.findAll();
         expect(results).toHaveLength(snippets.length);
         expect(results).toEqual(expect.arrayContaining(snippets));
+      });
+
+      // 新增：测试数据库错误处理
+      it('should handle database errors during findAll', async () => {
+        // 模拟数据库错误
+        jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+        await expect(repository.findAll()).rejects.toThrow(DatabaseError);
       });
     });
 
@@ -222,6 +300,14 @@ describe('SnippetRepository', () => {
         const results = await repository.findByTitle('Non-existent Title');
         expect(results).toHaveLength(0);
       });
+
+      // 新增：测试数据库错误处理
+      it('should handle database errors during findByTitle', async () => {
+        // 模拟数据库错误
+        jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+        await expect(repository.findByTitle('some-title')).rejects.toThrow(DatabaseError);
+      });
     });
 
     describe('findByLanguage', () => {
@@ -234,6 +320,14 @@ describe('SnippetRepository', () => {
       it('should return empty array for non-matching language', async () => {
         const results = await repository.findByLanguage('ruby');
         expect(results).toHaveLength(0);
+      });
+
+      // 新增：测试数据库错误处理
+      it('should handle database errors during findByLanguage', async () => {
+        // 模拟数据库错误
+        jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+        await expect(repository.findByLanguage('javascript')).rejects.toThrow(DatabaseError);
       });
     });
 
@@ -248,34 +342,106 @@ describe('SnippetRepository', () => {
         const results = await repository.findByTag('non-existent-tag');
         expect(results).toHaveLength(0);
       });
+
+      // 新增：测试数据库错误处理
+      it('should handle database errors during findByTag', async () => {
+        // 模拟数据库错误
+        jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('DB Error'));
+
+        await expect(repository.findByTag('some-tag')).rejects.toThrow(DatabaseError);
+      });
+    });
+  });
+
+  describe('constructor', () => {
+    it('should use default connection if not provided', () => {
+      const repo = new SnippetRepository();
+      expect(repo).toBeInstanceOf(SnippetRepository);
     });
   });
 
   describe('error handling', () => {
-    it('should handle database connection errors', async () => {
-      await connection.disconnect();
-      const snippetData = {
-        title: 'Test Snippet',
-        content: 'Test Content',
-        language: 'text',
-        tags: ['test'],
-      };
-
-      await expect(repository.create(snippetData)).rejects.toThrow(DatabaseError);
-    });
-
-    it('should handle transaction errors', async () => {
+    it('should handle non-DatabaseError transaction errors', async () => {
       // 模拟事务错误
       jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
 
-      const snippetData = {
+      await expect(repository.findAll()).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in findByTitle', async () => {
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(repository.findByTitle('test')).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in findByLanguage', async () => {
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(repository.findByLanguage('javascript')).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in findByTag', async () => {
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(repository.findByTag('test')).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in create', async () => {
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(
+        repository.create({
+          title: 'Test Snippet',
+          content: 'Test Content',
+          language: 'javascript',
+          tags: ['test'],
+        })
+      ).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in update', async () => {
+      // 创建一个测试片段
+      const snippet = await repository.create({
         title: 'Test Snippet',
         content: 'Test Content',
-        language: 'text',
+        language: 'javascript',
         tags: ['test'],
-      };
+      });
 
-      await expect(repository.create(snippetData)).rejects.toThrow(DatabaseError);
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(
+        repository.update(snippet.id, {
+          title: 'Updated Title',
+        })
+      ).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in delete', async () => {
+      // 创建一个测试片段
+      const snippet = await repository.create({
+        title: 'Test Snippet',
+        content: 'Test Content',
+        language: 'javascript',
+        tags: ['test'],
+      });
+
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(repository.delete(snippet.id)).rejects.toThrow(DatabaseError);
+    });
+
+    it('should handle non-DatabaseError transaction errors in findById', async () => {
+      // 模拟事务错误
+      jest.spyOn(connection, 'transaction').mockRejectedValueOnce(new Error('Transaction failed'));
+
+      await expect(repository.findById('test-id')).rejects.toThrow(DatabaseError);
     });
   });
 });

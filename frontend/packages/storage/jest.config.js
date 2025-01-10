@@ -2,8 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  testTimeout: 30000,
-  collectCoverage: true,
+  setupFilesAfterEnv: ['./jest.setup.ts'],
   coverageThreshold: {
     global: {
       branches: 80,
@@ -12,5 +11,4 @@ module.exports = {
       statements: 80,
     },
   },
-  setupFiles: ['fake-indexeddb/auto'],
 };

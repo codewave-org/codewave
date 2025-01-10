@@ -44,46 +44,72 @@ jobs:
       run: |
         poetry config virtualenvs.in-project true
         poetry install --no-interaction
-        poetry run pip install "httpx==0.24.1" pytest-asyncio
 
     - name: Install frontend dependencies
       working-directory: ./frontend
       run: |
         pnpm install
 
-    - name: Check backend code quality
+    - name: Check backend code style
       working-directory: ./backend
       run: |
         poetry run black . --check
         poetry run isort . --check
+
+    - name: Check backend code quality
+      working-directory: ./backend
+      run: |
         poetry run flake8 .
-        poetry run mypy .
         poetry run ruff check .
+
+    - name: Check backend types
+      working-directory: ./backend
+      run: |
+        poetry run mypy .
+
+    - name: Check frontend code style
+      working-directory: ./frontend
+      run: |
+        pnpm run format:check
+        pnpm run prettier:check
 
     - name: Check frontend code quality
       working-directory: ./frontend
       run: |
-        pnpm lint
-        pnpm type-check
-        pnpm prettier:check
+        pnpm run lint
+        pnpm run type-check
 
-    - name: Run backend tests
+    - name: Run backend unit tests
       working-directory: ./backend
       env:
         TEST_DATABASE_URL: sqlite+aiosqlite:///./test.db
         PYTHONPATH: ${{ github.workspace }}/backend
       run: |
-        poetry run pytest tests/ -v --asyncio-mode=auto
+        poetry run pytest tests/ -v
+
+    - name: Run backend API tests
+      working-directory: ./backend
+      env:
+        TEST_DATABASE_URL: sqlite+aiosqlite:///./test.db
+        PYTHONPATH: ${{ github.workspace }}/backend
+      run: |
+        poetry run pytest tests/api/ -v
 
     - name: Run frontend tests
       working-directory: ./frontend
       run: |
         pnpm test
 
-    - name: Run API tests
-      working-directory: ./backend
-      env:
-        TEST_DATABASE_URL: sqlite+aiosqlite:///./test.db
-        PYTHONPATH: ${{ github.workspace }}/backend
-      run: |
-        poetry run pytest tests/api/ -v --asyncio-mode=auto
+    - name: Upload backend coverage
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./backend/coverage.xml
+        flags: backend
+        name: backend-coverage
+
+    - name: Upload frontend coverage
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./frontend/coverage/coverage-final.json
+        flags: frontend
+        name: frontend-coverage

@@ -40,11 +40,17 @@ poetry run pytest tests/ -v
 ```bash
 cd frontend
 
-# 格式化代码
+# 格式化检查
+pnpm run format:check
+
+# 格式化修复
 pnpm run format
 
 # 代码质量检查
 pnpm run lint
+
+# 代码质量修复
+pnpm run lint:fix
 
 # 类型检查
 pnpm run type-check
@@ -64,6 +70,29 @@ pnpm run test
 - 所有 TypeScript 文件都需要进行类型检查
 - 使用 `--noEmit` 参数确保只进行类型检查而不生成文件
 - 测试文件也需要进行类型检查，确保测试代码的类型安全
+
+### 代码风格配置
+
+#### Prettier 配置
+- 使用项目根目录的 `.prettierrc` 配置文件
+- 使用 `.prettierignore` 忽略特定文件
+- 支持的文件类型：`*.{ts,tsx,js,jsx,json,md}`
+- 主要配置：
+  - 使用单引号
+  - 使用 4 空格缩进
+  - 行宽限制为 100 字符
+  - 使用 ES5 尾随逗号
+  - 箭头函数始终使用括号
+
+#### ESLint 配置
+- 使用项目根目录的 `.eslintrc.js` 配置文件
+- 使用 `.eslintignore` 忽略特定文件
+- 集成了 TypeScript 和 Prettier 规则
+- 主要规则：
+  - 启用 TypeScript 严格模式
+  - 与 Prettier 规则兼容
+  - 警告未使用的变量
+  - 关闭特定的过于严格的规则
 
 ## 测试规范
 
@@ -114,17 +143,14 @@ describe('Button', () => {
 
 ## 提交规范
 
-1. 提交前运行检查
-   ```bash
-   # 后端检查
-   cd backend
-   poetry run black . --check && poetry run isort . --check && poetry run flake8 . && poetry run mypy . && poetry run ruff check .
-   poetry run pytest tests/ -v
-
-   # 前端检查
-   cd frontend
-   pnpm run lint && pnpm run type-check && pnpm run test
-   ```
+1. 提交前检查清单
+   - 运行代码格式化检查
+   - 运行代码质量检查
+   - 运行类型检查
+   - 运行单元测试
+   - 确保所有检查都通过
+   - 检查是否有未提交的配置文件
+   - 确保不包含敏感信息
 
 2. 提交信息格式
    ```
@@ -158,4 +184,11 @@ describe('Button', () => {
      - 代码质量检查（eslint）
      - 类型检查（tsc）
      - 单元测试（jest）
-3. 所有检查通过后才能合并到目标分支 
+3. 所有检查通过后才能合并到目标分支
+
+## 注意事项
+1. 保持配置文件的一致性
+2. 定期更新依赖版本
+3. 关注代码质量工具的警告
+4. 保持测试覆盖率
+5. 遵循代码风格指南 

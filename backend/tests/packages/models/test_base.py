@@ -1,6 +1,6 @@
 """Tests for base model classes."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 from uuid import UUID
 
 import pytest
@@ -28,8 +28,8 @@ def engine():
 def session(engine):
     """Create a new database session."""
     Base.metadata.create_all(engine)
-    SessionLocal = sessionmaker(bind=engine)
-    session = SessionLocal()
+    session_local = sessionmaker(bind=engine)
+    session = session_local()
     try:
         yield session
     finally:

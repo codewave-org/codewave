@@ -114,4 +114,4 @@ class TestVersion:
         assert version2.snippet == snippet
         assert version3.snippet == snippet
         assert len(snippet.versions) == self.EXPECTED_VERSION_COUNT
-        assert snippet.latest_version == version3 
+        assert snippet.latest_version == version3

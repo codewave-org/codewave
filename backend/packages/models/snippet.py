@@ -47,4 +47,6 @@ class Snippet(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
         return max(self.versions, key=lambda v: v.version_number)
 
     def __repr__(self) -> str:
-        return f"<Snippet(id={self.id}, title='{self.title}', language='{self.language}')>" 
+        return (
+            f"<Snippet(id={self.id}, title='{self.title}', language='{self.language}')>"
+        )

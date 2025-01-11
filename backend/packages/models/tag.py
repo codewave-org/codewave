@@ -15,7 +15,9 @@ class Tag(Base, UUIDMixin, TimestampMixin):
 
     __tablename__ = "tags"
 
-    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True, index=True)
+    name: Mapped[str] = mapped_column(
+        String(50), nullable=False, unique=True, index=True
+    )
 
     # 关联关系
     snippet_tags: Mapped[list["SnippetTag"]] = relationship(
@@ -59,4 +61,4 @@ class SnippetTag(Base, UUIDMixin, TimestampMixin):
     )
 
     def __repr__(self) -> str:
-        return f"<SnippetTag(snippet_id='{self.snippet_id}', tag_id='{self.tag_id}')>" 
+        return f"<SnippetTag(snippet_id='{self.snippet_id}', tag_id='{self.tag_id}')>"

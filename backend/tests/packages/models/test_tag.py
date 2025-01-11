@@ -65,8 +65,9 @@ class TestTag:
 
         tag2 = Tag(name="python")
         session.add(tag2)
-        with pytest.raises(IntegrityError, 
-                         match="UNIQUE constraint failed"):  # SQLite raises IntegrityError
+        with pytest.raises(
+            IntegrityError, match="UNIQUE constraint failed"
+        ):  # SQLite raises IntegrityError
             session.commit()
         session.rollback()
 
@@ -105,8 +106,9 @@ class TestSnippetTag:
 
         snippet_tag2 = SnippetTag(snippet=snippet, tag=tag)
         session.add(snippet_tag2)
-        with pytest.raises(IntegrityError, 
-                         match="UNIQUE constraint failed"):  # SQLite raises IntegrityError
+        with pytest.raises(
+            IntegrityError, match="UNIQUE constraint failed"
+        ):  # SQLite raises IntegrityError
             session.commit()
         session.rollback()
 
@@ -141,4 +143,4 @@ class TestSnippetTag:
 
         session.delete(tag2)
         session.commit()
-        assert session.query(SnippetTag).count() == 0 
+        assert session.query(SnippetTag).count() == 0

@@ -52,4 +52,4 @@ class Version(Base, UUIDMixin, TimestampMixin):
             f"<Version(id={self.id}, "
             f"snippet_id='{self.snippet_id}', "
             f"version_number={self.version_number})>"
-        ) 
+        )

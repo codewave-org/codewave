@@ -117,4 +117,4 @@ class TestSnippet:
         session.commit()
 
         assert snippet.is_deleted is True
-        assert snippet.deleted_at is not None 
+        assert snippet.deleted_at is not None

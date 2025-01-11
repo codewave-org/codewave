@@ -115,4 +115,4 @@ def test_base_model_inheritance():
     assert hasattr(TestModel, "created_at")  # From TimestampMixin
     assert hasattr(TestModel, "updated_at")  # From TimestampMixin
     assert hasattr(TestModel, "deleted_at")  # From SoftDeleteMixin
-    assert hasattr(TestModel, "is_deleted")  # From SoftDeleteMixin 
+    assert hasattr(TestModel, "is_deleted")  # From SoftDeleteMixin

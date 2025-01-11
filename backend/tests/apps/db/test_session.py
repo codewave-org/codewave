@@ -14,7 +14,9 @@ from apps.db.session import SessionLocal, engine
 def test_engine_configuration():
     """Test database engine configuration."""
     assert isinstance(engine, Engine)
-    assert os.path.basename(str(engine.url.database)) == os.path.basename(str(settings.database_url))
+    assert os.path.basename(str(engine.url.database)) == os.path.basename(
+        str(settings.database_url)
+    )
     assert engine.echo == settings.DB_ECHO
 
 
@@ -22,6 +24,7 @@ def test_sqlite_connect_args():
     """Test SQLite specific connection arguments."""
     with patch("apps.core.config.settings.DB_DRIVER", "sqlite"):
         from apps.db import session
+
         engine = session.engine
         assert str(engine.url).startswith("sqlite")
         # SQLite specific options are now handled internally
@@ -32,6 +35,7 @@ def test_non_sqlite_driver_validation():
     with patch("apps.core.config.settings.DB_DRIVER", "postgresql"):
         with pytest.raises(ValueError) as exc_info:
             from apps.core.config import settings
+
             _ = settings.database_url
         assert "Unsupported database driver: postgresql" in str(exc_info.value)
 
@@ -43,7 +47,7 @@ def test_session_factory():
         assert isinstance(session, Session)
         # SQLAlchemy 2.0 no longer has autocommit/autoflush as attributes
         # Instead, we test the session behavior
-        
+
         # Test transaction management
         transaction = session.begin()
         assert isinstance(transaction, SessionTransaction)
@@ -60,7 +64,7 @@ def test_session_commit_and_rollback():
         with session.begin():
             # Simulate some database operations
             pass
-        
+
         # Start another transaction and rollback
         transaction = session.begin()
         try:
@@ -83,4 +87,4 @@ async def test_async_session_operations():
             pass
         # Transaction should be closed
     finally:
-        session.close() 
+        session.close()

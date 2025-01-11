@@ -4,18 +4,24 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy import JSON, create_engine
+from sqlalchemy.orm import Mapped, Session, mapped_column, sessionmaker
 
 from packages.models.base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
 
 
 # 使用 pytest.mark.model 标记这不是测试类
 @pytest.mark.model
-class TestModel(Base, TimestampMixin, UUIDMixin, SoftDeleteMixin):
-    """Test model that uses all mixins."""
+class TestModel(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
+    """Test model class."""
 
     __tablename__ = "test_models"
+    version_metadata: Mapped[dict] = mapped_column(JSON)
+
+    def __init__(self, version_metadata: dict | None = None):
+        """Initialize test model."""
+        super().__init__()
+        self.version_metadata = version_metadata or {}
 
 
 @pytest.fixture
@@ -89,15 +95,13 @@ def test_soft_delete_mixin(session: Session):
     assert not model.is_deleted
 
     # Verify soft delete
-    # Use naive datetime for SQLite
-    now = datetime.now()
-    model.deleted_at = now
+    model.soft_delete()
     session.commit()
-    # Compare without timezone info
-    assert model.deleted_at.replace(tzinfo=None) == now.replace(tzinfo=None)
+    assert model.deleted_at is not None
     assert model.is_deleted
 
     # Verify undelete
+    model._is_deleted = False
     model.deleted_at = None
     session.commit()
     assert model.deleted_at is None

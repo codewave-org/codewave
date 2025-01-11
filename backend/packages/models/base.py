@@ -3,7 +3,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, func
+from sqlalchemy import Boolean, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -38,7 +38,7 @@ class UUIDMixin:
 
 
 class SoftDeleteMixin:
-    """Mixin to add soft delete support to models."""
+    """软删除混入类"""
 
     deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
@@ -46,7 +46,19 @@ class SoftDeleteMixin:
         default=None,
     )
 
+    _is_deleted: Mapped[bool] = mapped_column(
+        "is_deleted",
+        Boolean,
+        nullable=False,
+        default=False,
+    )
+
     @property
     def is_deleted(self) -> bool:
         """Check if the record is soft deleted."""
-        return self.deleted_at is not None
+        return self._is_deleted
+
+    def soft_delete(self) -> None:
+        """软删除记录"""
+        self._is_deleted = True
+        self.deleted_at = datetime.now()

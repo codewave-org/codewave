@@ -1,12 +1,17 @@
-"""Database models package."""
+"""数据模型包"""
 
 from .base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
-from .test import TestModel
+from .snippet import Snippet
+from .tag import SnippetTag, Tag
+from .version import Version
 
 __all__ = [
     "Base",
     "SoftDeleteMixin",
     "TimestampMixin",
     "UUIDMixin",
-    "TestModel",
+    "Snippet",
+    "Tag",
+    "SnippetTag",
+    "Version",
 ]

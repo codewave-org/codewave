@@ -15,18 +15,18 @@ describe('EditorIntegration', () => {
   it('should handle file change events', () => {
     const mockPublish = jest.spyOn(eventBus, 'publish');
     const file = 'test.ts';
-    
+
     integration.handleFileChange(file);
-    
+
     expect(mockPublish).toHaveBeenCalledWith(
       expect.objectContaining({
         type: EventType.EDITOR_CHANGE,
         payload: expect.objectContaining({
           type: EventType.EDITOR_CHANGE,
           editor: expect.objectContaining({
-            file
-          })
-        })
+            file,
+          }),
+        }),
       })
     );
   });
@@ -35,9 +35,9 @@ describe('EditorIntegration', () => {
     const mockPublish = jest.spyOn(eventBus, 'publish');
     const content = 'test content';
     const version = 1;
-    
+
     integration.handleContentChange(content, version);
-    
+
     expect(mockPublish).toHaveBeenCalledWith(
       expect.objectContaining({
         type: EventType.EDITOR_CHANGE,
@@ -46,10 +46,10 @@ describe('EditorIntegration', () => {
           editor: expect.objectContaining({
             state: expect.objectContaining({
               content,
-              version
-            })
-          })
-        })
+              version,
+            }),
+          }),
+        }),
       })
     );
   });
@@ -57,9 +57,9 @@ describe('EditorIntegration', () => {
   it('should handle cursor move events', () => {
     const mockPublish = jest.spyOn(eventBus, 'publish');
     const position: Position = { line: 1, column: 1 };
-    
+
     integration.handleCursorMove(position);
-    
+
     expect(mockPublish).toHaveBeenCalledWith(
       expect.objectContaining({
         type: EventType.EDITOR_CHANGE,
@@ -67,10 +67,10 @@ describe('EditorIntegration', () => {
           type: EventType.EDITOR_CHANGE,
           editor: expect.objectContaining({
             state: expect.objectContaining({
-              position
-            })
-          })
-        })
+              position,
+            }),
+          }),
+        }),
       })
     );
   });
@@ -79,11 +79,11 @@ describe('EditorIntegration', () => {
     const mockPublish = jest.spyOn(eventBus, 'publish');
     const selection: Selection = {
       start: { line: 1, column: 1 },
-      end: { line: 2, column: 1 }
+      end: { line: 2, column: 1 },
     };
-    
+
     integration.handleSelectionChange(selection);
-    
+
     expect(mockPublish).toHaveBeenCalledWith(
       expect.objectContaining({
         type: EventType.EDITOR_CHANGE,
@@ -91,10 +91,10 @@ describe('EditorIntegration', () => {
           type: EventType.EDITOR_CHANGE,
           editor: expect.objectContaining({
             state: expect.objectContaining({
-              selection
-            })
-          })
-        })
+              selection,
+            }),
+          }),
+        }),
       })
     );
   });
@@ -102,9 +102,9 @@ describe('EditorIntegration', () => {
   it('should handle language change events', () => {
     const mockPublish = jest.spyOn(eventBus, 'publish');
     const language = 'typescript';
-    
+
     integration.handleLanguageChange(language);
-    
+
     expect(mockPublish).toHaveBeenCalledWith(
       expect.objectContaining({
         type: EventType.EDITOR_CHANGE,
@@ -112,10 +112,10 @@ describe('EditorIntegration', () => {
           type: EventType.EDITOR_CHANGE,
           editor: expect.objectContaining({
             state: expect.objectContaining({
-              language
-            })
-          })
-        })
+              language,
+            }),
+          }),
+        }),
       })
     );
   });
@@ -124,25 +124,25 @@ describe('EditorIntegration', () => {
     const content = 'test content';
     const version = 1;
     const position: Position = { line: 1, column: 1 };
-    
+
     integration.handleContentChange(content, version);
     integration.handleCursorMove(position);
-    
+
     const state = integration.syncEditorState();
     expect(state).toEqual(
       expect.objectContaining({
         content,
         version,
-        position
+        position,
       })
     );
-    
+
     const newState = {
       ...state,
       content: 'new content',
-      version: 2
+      version: 2,
     };
-    
+
     integration.restoreEditorState(newState);
     const restoredState = integration.syncEditorState();
     expect(restoredState).toEqual(newState);
@@ -151,16 +151,16 @@ describe('EditorIntegration', () => {
   it('should handle errors', () => {
     const mockPublish = jest.spyOn(eventBus, 'publish');
     const error = new Error('Test error');
-    
+
     integration.handleError(error);
-    
+
     expect(mockPublish).toHaveBeenCalledWith(
       expect.objectContaining({
         type: EventType.EDITOR_CHANGE,
         payload: expect.objectContaining({
-          type: EventType.EDITOR_CHANGE
-        })
+          type: EventType.EDITOR_CHANGE,
+        }),
       })
     );
   });
-}); 
+});

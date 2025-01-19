@@ -2,13 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { EventBus } from '../bus/event-bus';
 import { EventPriority, EventType, IPartialEvent } from '../types/event';
 import {
-    EditorEventType,
-    EditorState,
-    EditorStateChanges,
-    IEditorEvent,
-    IEditorIntegration,
-    Position,
-    Selection
+  EditorEventType,
+  EditorState,
+  EditorStateChanges,
+  IEditorEvent,
+  IEditorIntegration,
+  Position,
+  Selection,
 } from './types';
 
 export class EditorIntegration implements IEditorIntegration {
@@ -24,7 +24,7 @@ export class EditorIntegration implements IEditorIntegration {
       file: '',
       content: '',
       position: { line: 0, column: 0 },
-      version: 0
+      version: 0,
     };
   }
 
@@ -37,15 +37,15 @@ export class EditorIntegration implements IEditorIntegration {
         id: this.id,
         file: this.state.file,
         state: { ...this.state },
-        changes
-      }
+        changes,
+      },
     };
 
     const event: IPartialEvent<IEditorEvent> = {
       id: uuidv4(),
       type: EventType.EDITOR_CHANGE,
       priority: EventPriority.NORMAL,
-      payload: editorEvent
+      payload: editorEvent,
     };
 
     this.eventBus.publish(event);
@@ -89,4 +89,4 @@ export class EditorIntegration implements IEditorIntegration {
     this.emitEditorEvent(EditorEventType.ERROR);
     // 可以在这里添加更多错误处理逻辑
   }
-} 
+}

@@ -45,7 +45,7 @@ export enum EditorEventType {
   CURSOR_MOVE = 'editor.cursor.move',
   SELECTION_CHANGE = 'editor.selection.change',
   LANGUAGE_CHANGE = 'editor.language.change',
-  ERROR = 'editor.error'
+  ERROR = 'editor.error',
 }
 
 export interface IEditorIntegration {
@@ -55,11 +55,11 @@ export interface IEditorIntegration {
   handleCursorMove(position: Position): void;
   handleSelectionChange(selection: Selection): void;
   handleLanguageChange(language: string): void;
-  
+
   // 状态同步
   syncEditorState(): EditorState;
   restoreEditorState(state: EditorState): void;
-  
+
   // 错误处理
   handleError(error: Error): void;
 }

@@ -3,14 +3,14 @@ export enum EventType {
   USER = 'user',
   EDITOR = 'editor',
   LEARNING = 'learning',
-  AI = 'ai'
+  AI = 'ai',
 }
 
 export enum EventPriority {
   LOW = 0,
   NORMAL = 1,
   HIGH = 2,
-  CRITICAL = 3
+  CRITICAL = 3,
 }
 
 export interface IEvent {
@@ -24,4 +24,4 @@ export interface IEvent {
 
 export interface IEventHandler<T extends IEvent = IEvent> {
   handle(event: T): void | Promise<void>;
-} 
+}

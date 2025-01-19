@@ -40,13 +40,13 @@ export class DataCollector implements IDataCollector {
   }
 
   public collectBatch(events: IEvent[]): void {
-    events.forEach(event => this.collect(event));
+    events.forEach((event) => this.collect(event));
   }
 
   public asObservable(): Observable<IEvent> {
     return this.eventSubject.asObservable().pipe(
-      filter(event => this.shouldCollect(event)),
-      map(event => this.preprocess(event))
+      filter((event) => this.shouldCollect(event)),
+      map((event) => this.preprocess(event))
     );
   }
 
@@ -70,4 +70,4 @@ export class DataCollector implements IDataCollector {
       { ...event }
     );
   }
-} 
+}

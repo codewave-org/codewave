@@ -1,4 +1,4 @@
-import MonacoEditor, { OnChange } from '@monaco-editor/react';
+import { Editor as MonacoEditor, OnChange, OnMount } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import type { EditorProps, EditorRef } from '../types';
@@ -29,7 +29,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>((props, ref) => {
     getEditor: () => editorRef.current!,
   }));
 
-  const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
+  const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
     onMount?.(editor);
   };

@@ -1,3 +1,4 @@
+import type { OnMount } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 
 export interface EditorConfig {
@@ -16,8 +17,8 @@ export interface EditorConfig {
 }
 
 export interface EditorProps extends EditorConfig {
-  onChange?: (value: string) => void;
-  onMount?: (editor: editor.IStandaloneCodeEditor) => void;
+  onChange?: (value: string | undefined) => void;
+  onMount?: OnMount;
   height?: string | number;
   width?: string | number;
 }

@@ -153,7 +153,6 @@ describe('DataCollector', () => {
     collector.addPreprocessor(addSource);
     collector.clear();
 
-    // @ts-ignore: Accessing private property for testing
     expect(collector['preprocessors']).toEqual([]);
   });
-}); 
+});

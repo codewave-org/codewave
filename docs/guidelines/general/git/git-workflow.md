@@ -30,7 +30,8 @@ poetry run ruff check .
 poetry run mypy .
 
 # 运行测试
-poetry run pytest tests/ -v
+poetry run pytest tests/ -v        # 单元测试
+poetry run pytest tests/api/ -v    # API 测试
 ```
 
 ### 前端检查
@@ -42,6 +43,7 @@ cd frontend
 
 # 格式化检查
 pnpm run format:check
+pnpm run prettier:check
 
 # 格式化修复
 pnpm run format
@@ -54,6 +56,9 @@ pnpm run lint:fix
 
 # 类型检查
 pnpm -r type-check
+
+# 构建检查
+pnpm -r build
 
 # 运行测试
 pnpm -r test

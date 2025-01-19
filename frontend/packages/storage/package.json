@@ -12,7 +12,9 @@
         "lint": "eslint src --ext .ts,.tsx",
         "lint:fix": "eslint src --ext .ts,.tsx --fix",
         "test": "NODE_NO_WARNINGS=1 jest --coverage --coverageReporters=json --coverageReporters=lcov --coverageReporters=text",
-        "type-check": "tsc --noEmit"
+        "type-check": "tsc --noEmit",
+        "format:check": "prettier --check \"src/**/*.{ts,tsx,md}\"",
+        "format": "prettier --write \"src/**/*.{ts,tsx,md}\""
     },
     "dependencies": {
         "idb": "^7.1.1",

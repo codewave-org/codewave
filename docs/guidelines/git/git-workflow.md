@@ -53,10 +53,10 @@ pnpm run lint
 pnpm run lint:fix
 
 # 类型检查
-pnpm run type-check
+pnpm -r type-check
 
 # 运行测试
-pnpm run test
+pnpm -r test
 ```
 
 ### 类型检查说明
@@ -70,6 +70,7 @@ pnpm run test
 - 所有 TypeScript 文件都需要进行类型检查
 - 使用 `--noEmit` 参数确保只进行类型检查而不生成文件
 - 测试文件也需要进行类型检查，确保测试代码的类型安全
+- 使用 `pnpm -r type-check` 对所有包进行类型检查
 
 ### 代码风格配置
 
@@ -91,7 +92,7 @@ pnpm run test
 - 主要规则：
   - 启用 TypeScript 严格模式
   - 与 Prettier 规则兼容
-  - 警告未使用的变量
+  - 警告未使用的变量（使用 `argsIgnorePattern: "^_"` 忽略以下划线开头的参数）
   - 关闭特定的过于严格的规则
 
 ## 测试规范
@@ -127,27 +128,54 @@ pnpm run test
 - 工具函数测试放在相应目录下，命名为 `*.test.ts`
 - 集成测试放在 `tests/` 目录下
 
+#### 测试环境配置
+- 使用 Jest 作为测试框架
+- 使用 `@testing-library/react` 进行组件测试
+- 使用 `jest-environment-jsdom` 提供浏览器环境
+- 使用 `ts-jest` 处理 TypeScript 文件
+
 #### 测试示例
 ```typescript
-import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
-import { Button } from './Button'
+import { render, screen } from '@testing-library/react';
 
-describe('Button', () => {
-    it('renders children correctly', () => {
-        const { getByText } = render(<Button>Click me</Button>)
-        expect(getByText('Click me')).toBeInTheDocument()
-    })
-})
+describe('Component', () => {
+    it('renders correctly', () => {
+        render(<Component />);
+        const element = screen.getByTestId('test-id');
+        expect(element).toBeInTheDocument();
+    });
+
+    it('handles props correctly', () => {
+        const props = {
+            value: 'test',
+            onChange: jest.fn()
+        };
+        render(<Component {...props} />);
+        expect(screen.getByText('test')).toBeInTheDocument();
+    });
+});
+```
+
+#### Mock 示例
+```typescript
+// Mock 外部模块
+jest.mock('@external/module', () => ({
+    ExternalComponent: ({ children, ...props }) => (
+        <div data-testid="mock-component" {...props}>{children}</div>
+    )
+}));
+
+// Mock 函数
+const mockFn = jest.fn();
 ```
 
 ## 提交规范
 
 1. 提交前检查清单
-   - 运行代码格式化检查
-   - 运行代码质量检查
-   - 运行类型检查
-   - 运行单元测试
+   - 运行代码格式化检查 (`format:check`)
+   - 运行代码质量检查 (`lint`)
+   - 运行类型检查 (`type-check`)
+   - 运行单元测试 (`test`)
    - 确保所有检查都通过
    - 检查是否有未提交的配置文件
    - 确保不包含敏感信息
@@ -182,7 +210,7 @@ describe('Button', () => {
    - 前端：
      - 代码格式检查（prettier）
      - 代码质量检查（eslint）
-     - 类型检查（tsc）
+     - 类型检查（tsc --noEmit）
      - 单元测试（jest）
 3. 所有检查通过后才能合并到目标分支
 
@@ -191,4 +219,7 @@ describe('Button', () => {
 2. 定期更新依赖版本
 3. 关注代码质量工具的警告
 4. 保持测试覆盖率
-5. 遵循代码风格指南 
+5. 遵循代码风格指南
+6. 测试代码也需要遵循相同的代码质量标准
+7. 合理使用 Mock 来隔离外部依赖
+8. 定期清理过时的测试用例和 Mock 

@@ -4,7 +4,9 @@ import { Editor } from './Editor';
 
 // Mock Monaco Editor
 jest.mock('@monaco-editor/react', () => {
-  return function MockMonacoEditor(props: Partial<editor.IStandaloneEditorConstructionOptions>) {
+  return function MockMonacoEditor({
+    ...props
+  }: Partial<editor.IStandaloneEditorConstructionOptions> & { onMount?: () => void }) {
     return <div data-testid="monaco-editor" {...props} />;
   };
 });

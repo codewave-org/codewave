@@ -2,7 +2,9 @@
     "root": true,
     "env": {
         "browser": true,
-        "es2020": true
+        "es2020": true,
+        "node": true,
+        "jest": true
     },
     "extends": [
         "eslint:recommended",
@@ -15,9 +17,7 @@
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project": [
-            "./tsconfig.json"
-        ]
+        "project": ["./tsconfig.json"]
     },
     "plugins": [
         "react",
@@ -26,7 +26,9 @@
     ],
     "rules": {
         "react/react-in-jsx-scope": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
     },
     "settings": {
         "react": {

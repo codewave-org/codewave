@@ -5,5 +5,7 @@
     "singleQuote": true,
     "trailingComma": "es5",
     "bracketSpacing": true,
-    "endOfLine": "lf"
+    "endOfLine": "lf",
+    "arrowParens": "always",
+    "plugins": ["prettier-plugin-organize-imports"]
 }

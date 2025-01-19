@@ -71,7 +71,6 @@ jobs:
       working-directory: ./frontend
       run: |
         pnpm run format:check
-        pnpm run prettier:check
 
     - name: Check frontend code quality
       working-directory: ./frontend

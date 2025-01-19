@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { EditorState, Position, Selection, SupportedLanguage } from '@/types/editor';
+import { create } from 'zustand';
 
 interface EditorStore extends EditorState {
   setLanguage: (language: SupportedLanguage) => void;

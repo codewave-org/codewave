@@ -1,20 +1,14 @@
 import { useEditorStore } from '@/stores/editorStore';
-import type { SupportedLanguage } from '@/types/editor';
-import Editor from '@monaco-editor/react';
+import { Editor, OnMount } from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 
 interface CodeEditorProps {
-  defaultLanguage?: SupportedLanguage;
   defaultValue?: string;
   height?: string | number;
 }
 
-export function CodeEditor({
-  defaultLanguage = 'cpp',
-  defaultValue = '',
-  height = '400px',
-}: CodeEditorProps) {
-  const editorRef = useRef<any>(null);
+export function CodeEditor({ defaultValue = '', height = '400px' }: CodeEditorProps) {
+  const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
   const { language, code, setCode, setPosition, setSelection } = useEditorStore();
 
   useEffect(() => {
@@ -23,12 +17,12 @@ export function CodeEditor({
     }
   }, [defaultValue, code, setCode]);
 
-  const handleEditorDidMount = (editor: any) => {
+  const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
 
     // 监听光标位置变化
-    editor.onDidChangeCursorPosition((e: any) => {
+    editor.onDidChangeCursorPosition((e) => {
       setPosition({
         line: e.position.lineNumber,
         column: e.position.column,
@@ -36,7 +30,7 @@ export function CodeEditor({
     });
 
     // 监听选择范围变化
-    editor.onDidChangeCursorSelection((e: any) => {
+    editor.onDidChangeCursorSelection((e) => {
       setSelection({
         start: {
           line: e.selection.startLineNumber,

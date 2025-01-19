@@ -1,0 +1,191 @@
+# CodeWave 文档管理指南
+
+## 1. 文档结构
+
+```
+docs/
+├── README.md              # 本文档：文档管理指南
+├── architecture/          # 系统架构文档
+│   ├── README.md          # 架构文档管理指南
+│   ├── overview/          # 整体架构
+│   │   ├── system-architecture.md    # 系统整体架构
+│   │   ├── data-flow.md             # 数据流设计
+│   │   └── repository-strategy.md    # 仓库管理策略
+│   ├── frontend/          # 前端架构
+│   │   ├── framework.md   # 前端框架设计
+│   │   └── components/    # 组件设计文档
+│   ├── backend/           # 后端架构
+│   │   ├── framework.md   # 后端框架设计
+│   │   └── services/      # 服务设计文档
+│   └── features/          # 功能特性架构
+│       ├── realtime-communication.md  # 实时通信
+│       └── code-snippet-system.md     # 代码片段系统
+├── api/                  # API 文档
+│   ├── README.md         # API 文档管理指南
+│   ├── guidelines/       # API 设计规范
+│   │   ├── design-guidelines.md  # API 设计指南
+│   │   └── template.md           # API 文档模板
+│   ├── frontend/         # 前端 API
+│   └── backend/          # 后端 API
+├── development/          # 开发指南
+│   ├── README.md         # 开发指南管理指南
+│   ├── setup/            # 环境搭建
+│   ├── workflow/         # 开发流程
+│   ├── frontend/         # 前端开发
+│   ├── backend/          # 后端开发
+│   └── tools.md          # 开发工具指南
+├── guidelines/           # 开发规范
+│   ├── README.md         # 开发规范管理指南
+│   ├── general/          # 通用规范
+│   │   └── git/          # Git 相关规范
+│   │       ├── git-workflow.md     # Git 工作流
+│   │       └── version-control.md  # 版本控制
+│   ├── code/            # 代码规范
+│   ├── frontend/        # 前端规范
+│   └── backend/         # 后端规范
+├── deployment/          # 部署文档
+│   ├── README.md        # 部署文档管理指南
+│   ├── environments/    # 环境配置
+│   └── operations/      # 运维指南
+├── templates/           # 文档模板
+└── archived/            # 归档文档
+```
+
+## 2. 文档更新规则
+
+### 2.1 架构文档更新
+- 更新 `architecture/overview` 时：
+  * 检查并更新相关的前端/后端架构文档
+  * 确保 `features/` 下的功能文档同步更新
+  * 更新 API 设计规范（如有必要）
+
+- 更新 `architecture/frontend` 或 `architecture/backend` 时：
+  * 同步更新对应的 API 文档
+  * 更新相关的开发指南
+  * 检查并更新部署文档
+
+### 2.2 API 文档更新
+- 更新 API 设计规范时：
+  * 同步更新前端和后端的 API 实现文档
+  * 更新相关的代码示例
+  * 检查并更新测试用例
+
+- 更新具体 API 实现时：
+  * 确保符合 API 设计规范
+  * 更新相关的测试文档
+  * 更新开发指南中的示例
+
+### 2.3 开发文档更新
+- 更新开发规范时：
+  * 同步更新相关的工具配置
+  * 更新 CI/CD 配置（如有必要）
+  * 更新团队工作流程文档
+
+- 更新开发流程时：
+  * 更新相关的操作指南
+  * 更新自动化脚本（如有）
+  * 更新团队协作文档
+
+## 3. 文档版本控制
+1. 版本号规则
+   - 主版本号：重大架构变更(architecture/ 目录下的文档)
+   - 次版本号：功能模块变更(api/ 和 development/ 目录下的文档)
+   - 修订号：文档优化和错误修正(guidelines/ 和 deployment/ 目录下的文档)
+
+2. 变更记录
+   - 每个文档底部维护变更历史
+   - 记录格式：日期、版本号、变更内容、作者
+
+
+## 4. 文档编写规范
+
+### 4.1 格式要求
+1. 文件命名
+   - 使用小写字母
+   - 单词间用连字符(-)分隔
+   - 清晰表达文档内容
+   - 示例：`api-design-guidelines.md`
+
+2. Markdown 规范
+   - 使用 Markdown 格式
+   - 必须包含标题和简介
+   - 代码示例需指定语言
+   - 重要配置需提供注释
+   - 关联文档需提供链接
+   - 适当使用表格和图表
+
+### 4.2 内容要求
+1. 文档结构
+   - 清晰的标题层级
+   - 简明的概述说明
+   - 详细的内容描述
+   - 相关文档引用
+
+2. 编写风格
+   - 准确性：技术描述准确
+   - 清晰性：表述简洁明了
+   - 完整性：信息覆盖全面
+   - 实用性：重点突出实践
+
+## 5. 文档审查流程
+1. 文档变更提交
+   - 创建文档变更分支
+   - 提交变更说明
+   - 关联相关 Issue/PR
+
+2. 审查要点
+   - 技术准确性
+   - 文档完整性
+   - 关联文档同步性
+   - 格式规范性
+
+## 6. 文档维护流程
+
+### 6.1 定期审查
+1. 审查周期
+   - 架构文档：每季度
+   - API 文档：每月
+   - 开发文档：每两周
+   - 规范文档：每季度
+
+2. 审查内容
+   - 文档时效性
+   - 技术准确性
+   - 实践适用性
+   - 关联完整性
+
+### 6.2 文档更新
+1. 更新触发条件
+   - 架构变更
+   - 功能新增
+   - 流程优化
+   - 规范调整
+   - 问题反馈
+
+2. 更新流程
+   - 创建更新任务
+   - 编写文档变更
+   - 关联文档同步
+   - 提交审查
+   - 合并发布
+
+### 6.3 文档归档
+1. 归档时机
+   - 技术过时
+   - 功能废弃
+   - 流程变更
+   - 规范更新
+
+2. 归档方式
+   - 移动到 archived 目录
+   - 添加归档说明
+   - 更新相关引用
+   - 保留历史记录
+
+## 7. 文档模板
+每个类别的文档都有其标准模板，位于 `templates/` 目录下：
+- architecture-template.md
+- api-template.md
+- development-template.md
+- guideline-template.md
+- deployment-template.md

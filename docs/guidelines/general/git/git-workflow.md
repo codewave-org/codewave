@@ -43,7 +43,6 @@ cd frontend
 
 # 格式化检查
 pnpm run format:check
-pnpm run prettier:check
 
 # 格式化修复
 pnpm run format

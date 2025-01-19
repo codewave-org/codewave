@@ -1,15 +1,25 @@
 import { render, screen } from '@testing-library/react';
-import type { editor } from 'monaco-editor';
 import { Editor } from './Editor';
 
-// Mock Monaco Editor
-jest.mock('@monaco-editor/react', () => {
-  return function MockMonacoEditor({
-    ...props
-  }: Partial<editor.IStandaloneEditorConstructionOptions> & { onMount?: () => void }) {
-    return <div data-testid="monaco-editor" {...props} />;
-  };
-});
+// Mock @monaco-editor/react
+jest.mock('@monaco-editor/react', () => ({
+  __esModule: true,
+  Editor: ({
+    language,
+    value,
+    options,
+  }: {
+    language?: string;
+    value?: string;
+    options?: Record<string, unknown>;
+  }) => (
+    <div data-testid="monaco-editor" data-language={language} data-value={value}>
+      {JSON.stringify(options)}
+    </div>
+  ),
+  OnChange: jest.fn(),
+  OnMount: jest.fn(),
+}));
 
 describe('Editor', () => {
   it('renders with default props', () => {
@@ -21,19 +31,17 @@ describe('Editor', () => {
   it('passes correct props to Monaco Editor', () => {
     const props = {
       language: 'typescript',
-      theme: 'vs-light',
       value: 'test code',
-      height: '500px',
-      width: '800px',
+      fontSize: 16,
+      readOnly: true,
     };
 
     render(<Editor {...props} />);
     const editorElement = screen.getByTestId('monaco-editor');
 
-    expect(editorElement).toHaveAttribute('language', 'typescript');
-    expect(editorElement).toHaveAttribute('theme', 'vs-light');
-    expect(editorElement).toHaveAttribute('value', 'test code');
-    expect(editorElement).toHaveAttribute('height', '500px');
-    expect(editorElement).toHaveAttribute('width', '800px');
+    expect(editorElement).toHaveAttribute('data-language', 'typescript');
+    expect(editorElement).toHaveAttribute('data-value', 'test code');
+    expect(editorElement).toHaveTextContent(/"fontSize":16/);
+    expect(editorElement).toHaveTextContent(/"readOnly":true/);
   });
 });

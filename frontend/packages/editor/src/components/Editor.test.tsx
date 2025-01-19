@@ -4,7 +4,11 @@ import { Editor } from './Editor';
 // Mock @monaco-editor/react
 jest.mock('@monaco-editor/react', () => ({
   __esModule: true,
-  Editor: ({ language, value, options }: {
+  Editor: ({
+    language,
+    value,
+    options,
+  }: {
     language?: string;
     value?: string;
     options?: Record<string, unknown>;

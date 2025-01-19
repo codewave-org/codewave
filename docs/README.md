@@ -5,21 +5,6 @@
 ```
 docs/
 ├── README.md              # 本文档：文档管理指南
-├── architecture/          # 系统架构文档
-│   ├── README.md          # 架构文档管理指南
-│   ├── overview/          # 整体架构
-│   │   ├── system-architecture.md    # 系统整体架构
-│   │   ├── data-flow.md             # 数据流设计
-│   │   └── repository-strategy.md    # 仓库管理策略
-│   ├── frontend/          # 前端架构
-│   │   ├── framework.md   # 前端框架设计
-│   │   └── components/    # 组件设计文档
-│   ├── backend/           # 后端架构
-│   │   ├── framework.md   # 后端框架设计
-│   │   └── services/      # 服务设计文档
-│   └── features/          # 功能特性架构
-│       ├── realtime-communication.md  # 实时通信
-│       └── code-snippet-system.md     # 代码片段系统
 ├── api/                  # API 文档
 │   ├── README.md         # API 文档管理指南
 │   ├── guidelines/       # API 设计规范
@@ -53,18 +38,7 @@ docs/
 
 ## 2. 文档更新规则
 
-### 2.1 架构文档更新
-- 更新 `architecture/overview` 时：
-  * 检查并更新相关的前端/后端架构文档
-  * 确保 `features/` 下的功能文档同步更新
-  * 更新 API 设计规范（如有必要）
-
-- 更新 `architecture/frontend` 或 `architecture/backend` 时：
-  * 同步更新对应的 API 文档
-  * 更新相关的开发指南
-  * 检查并更新部署文档
-
-### 2.2 API 文档更新
+### 2.1 API 文档更新
 - 更新 API 设计规范时：
   * 同步更新前端和后端的 API 实现文档
   * 更新相关的代码示例
@@ -75,7 +49,7 @@ docs/
   * 更新相关的测试文档
   * 更新开发指南中的示例
 
-### 2.3 开发文档更新
+### 2.2 开发文档更新
 - 更新开发规范时：
   * 同步更新相关的工具配置
   * 更新 CI/CD 配置（如有必要）

@@ -7,16 +7,16 @@
         "apps/*"
     ],
     "scripts": {
-        "dev": "turbo run dev",
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "lint": "turbo run lint",
-        "lint:fix": "turbo run lint:fix",
+        "dev": "pnpm -r dev",
+        "build": "pnpm -r build",
+        "test": "pnpm -r test",
+        "lint": "pnpm -r lint",
+        "lint:fix": "pnpm -r lint:fix",
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
         "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
-        "prettier:check": "turbo run format:check",
-        "clean": "turbo run clean && rm -rf node_modules",
-        "type-check": "turbo run type-check"
+        "prettier:check": "pnpm -r format:check",
+        "clean": "pnpm -r clean && rm -rf node_modules",
+        "type-check": "pnpm -r type-check"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -27,7 +27,6 @@
         "eslint-plugin-react": "^7.37.3",
         "eslint-plugin-react-hooks": "^4.6.2",
         "prettier": "^3.4.2",
-        "turbo": "^1.11.2",
         "typescript": "~5.3.3"
     },
     "engines": {

@@ -13,34 +13,39 @@
     "scripts": {
         "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
         "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
-        "lint": "eslint \"src/**/*.ts*\"",
-        "lint:fix": "eslint \"src/**/*.ts*\" --fix",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
         "clean": "rm -rf node_modules && rm -rf dist",
         "test": "jest",
         "test:watch": "jest --watch",
+        "format": "prettier --write \"src/**/*.{ts,tsx,md}\"",
         "format:check": "prettier --check \"src/**/*.{ts,tsx,md}\"",
-        "format": "prettier --write \"src/**/*.{ts,tsx,md}\""
+        "type-check": "tsc --noEmit"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^6.4.0",
         "@testing-library/react": "^14.2.0",
-        "@types/jest": "^29.5.11",
-        "@types/react": "^18.2.0",
-        "@types/react-dom": "^18.2.0",
+        "@types/jest": "^29.5.12",
+        "@types/react": "^18.2.48",
+        "@types/react-dom": "^18.2.18",
         "eslint": "^8.56.0",
         "eslint-config-custom": "*",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
+        "prettier": "^3.4.2",
         "react": "^18.2.0",
         "ts-jest": "^29.1.2",
         "tsconfig": "*",
-        "tsup": "^8.0.0",
-        "typescript": "^5.3.0",
-        "prettier": "^3.4.2"
+        "tsup": "^8.0.2",
+        "typescript": "^5.3.3"
     },
     "dependencies": {
+        "@monaco-editor/react": "^4.5.2",
         "monaco-editor": "^0.45.0",
-        "@monaco-editor/react": "^4.6.0",
         "zustand": "^4.4.0"
+    },
+    "peerDependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
     }
 }

@@ -29,9 +29,9 @@ export const Editor = forwardRef<EditorRef, EditorProps>((props, ref) => {
     getEditor: () => editorRef.current!,
   }));
 
-  const handleEditorDidMount: OnMount = (editor) => {
+  const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
-    onMount?.(editor);
+    onMount?.(editor, monaco);
   };
 
   const handleChange: OnChange = (value) => {

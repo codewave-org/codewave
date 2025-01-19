@@ -13,5 +13,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-organize-imports": "^4.1.0"
+  }
 }

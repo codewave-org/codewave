@@ -60,8 +60,8 @@ pnpm -r type-check
 pnpm -r build
 
 # 运行测试
-cd packages && pnpm -r test       # 运行包测试（Jest）
-cd ../apps/web && pnpm test -- --run  # 运行 web 应用测试（Vitest）
+pnpm --filter "./packages/**" test       # 运行包测试（Jest）
+cd apps/web && pnpm test -- --run  # 运行 web 应用测试（Vitest）
 ```
 
 ### 类型检查说明

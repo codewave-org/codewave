@@ -1,9 +1,14 @@
 'use client';
 
-import { CodeEditor } from '@/components/CodeEditor';
-import { MainLayout } from '@/layouts/MainLayout';
-import { useEditorStore } from '@/stores/editorStore';
-import type { SupportedLanguage } from '@/types/editor';
+import { CodeEditor } from '@/components/editor/CodeEditor';
+import { EditorToolbar } from '@/components/editor/EditorToolbar';
+import { Hints } from '@/components/panels/LeftPanels/Hints';
+import { Questions } from '@/components/panels/LeftPanels/Questions';
+import { TestRun } from '@/components/panels/LeftPanels/TestRun';
+import { Chat } from '@/components/panels/RightPanels/Chat';
+import { Progress } from '@/components/panels/RightPanels/Progress';
+import { Warnings } from '@/components/panels/RightPanels/Warnings';
+import { usePanels } from '@/hooks/usePanels';
 
 const defaultCode = `#include <iostream>
 #include <vector>
@@ -21,103 +26,105 @@ int main() {
 }`;
 
 export default function Home() {
-  const { language, setLanguage } = useEditorStore();
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value as SupportedLanguage);
-  };
+  const { activePanel, togglePanel } = usePanels();
 
   return (
-    <MainLayout>
-      <div className="container flex min-h-screen gap-4 py-4">
-        {/* 左侧面板 */}
-        <div className="w-64 space-y-4">
-          {/* 知识点 */}
-          <div className="rounded-lg border p-4">
-            <h2 className="mb-2 font-semibold">Knowledge Points</h2>
-            <div className="space-y-2">{/* 这里将添加知识点列表 */}</div>
+    <main className="flex flex-col h-screen bg-gray-900 text-white">
+      {/* 顶部导航栏 */}
+      <div className="flex h-12 items-center justify-between bg-gray-800 px-4">
+        <div className="flex items-center gap-4">
+          <div className="text-xl font-bold text-blue-400">CodeWave</div>
+        </div>
+      </div>
+
+      {/* 编辑器工具栏 */}
+      <EditorToolbar />
+
+      {/* 主要内容区域 */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* 左侧边栏 */}
+        <div className="flex">
+          {/* 侧边栏按钮 */}
+          <div className="flex w-12 flex-col bg-gray-800">
+            <button
+              className={`p-3 hover:bg-gray-700 ${
+                activePanel.left === 'questions' ? 'bg-gray-700' : ''
+              }`}
+              onClick={() => togglePanel('left', 'questions')}
+              aria-label="题目"
+            >
+              Q
+            </button>
+            <button
+              className={`p-3 hover:bg-gray-700 ${
+                activePanel.left === 'hints' ? 'bg-gray-700' : ''
+              }`}
+              onClick={() => togglePanel('left', 'hints')}
+              aria-label="提示"
+            >
+              H
+            </button>
+            <button
+              className={`p-3 hover:bg-gray-700 ${
+                activePanel.left === 'testrun' ? 'bg-gray-700' : ''
+              }`}
+              onClick={() => togglePanel('left', 'testrun')}
+              aria-label="测试"
+            >
+              T
+            </button>
           </div>
 
-          {/* 提示 */}
-          <div className="rounded-lg border p-4">
-            <h2 className="mb-2 font-semibold">Hints</h2>
-            <div className="space-y-2">{/* 这里将添加提示列表 */}</div>
-          </div>
-
-          {/* 测试用例 */}
-          <div className="rounded-lg border p-4">
-            <h2 className="mb-2 font-semibold">Test Cases</h2>
-            <div className="space-y-2">{/* 这里将添加测试用例列表 */}</div>
-          </div>
+          {/* 左侧面板 */}
+          <Questions isOpen={activePanel.left === 'questions'} />
+          <Hints isOpen={activePanel.left === 'hints'} />
+          <TestRun isOpen={activePanel.left === 'testrun'} />
         </div>
 
-        {/* 中间编程区域 */}
-        <div className="flex-1 space-y-4">
-          {/* 顶部工具栏 */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <select className="rounded-md border px-3 py-1" aria-label="选择题目">
-                <option>两数之和</option>
-              </select>
-              <select
-                className="rounded-md border px-3 py-1"
-                aria-label="选择编程语言"
-                value={language}
-                onChange={handleLanguageChange}
-              >
-                <option value="cpp">C++</option>
-                <option value="python">Python</option>
-                <option value="javascript">JavaScript</option>
-                <option value="typescript">TypeScript</option>
-                <option value="java">Java</option>
-              </select>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="rounded-md border px-3 py-1">Test</button>
-              <button className="rounded-md border px-3 py-1">Submit</button>
-            </div>
-          </div>
-
-          {/* 题目描述 */}
-          <div className="rounded-lg border p-4">
-            <h1 className="mb-4 text-xl font-bold">两数之和</h1>
-            <div className="space-y-4">
-              <p>
-                给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target
-                的那两个整数，并返回它们的数组下标。
-              </p>
-              <p>你可以假设每种输入只会对应一个答案，并且你不能重复使用相同的元素。</p>
-              <p>你可以按任意顺序返回答案。</p>
-            </div>
-          </div>
-
-          {/* 代码编辑器 */}
-          <div className="rounded-lg border p-4">
-            <CodeEditor defaultValue={defaultCode} height="400px" />
-          </div>
+        {/* 中间编辑器区域 */}
+        <div className="flex-1">
+          <CodeEditor defaultValue={defaultCode} height="calc(100vh - 96px)" />
         </div>
 
-        {/* 右侧面板 */}
-        <div className="w-64 space-y-4">
-          {/* 聊天区域 */}
-          <div className="rounded-lg border p-4">
-            <h2 className="mb-2 font-semibold">Chat</h2>
-            <div className="h-[300px] space-y-2">{/* 这里将添加聊天消息 */}</div>
-          </div>
+        {/* 右侧边栏 */}
+        <div className="flex">
+          {/* 右侧面板 */}
+          <Chat isOpen={activePanel.right === 'chat'} />
+          <Progress isOpen={activePanel.right === 'progress'} />
+          <Warnings isOpen={activePanel.right === 'warnings'} />
 
-          {/* 进度 */}
-          <div className="rounded-lg border p-4">
-            <h2 className="mb-2 font-semibold">Process</h2>
-            <div className="space-y-2">{/* 这里将添加进度信息 */}</div>
-          </div>
-
-          {/* 警告 */}
-          <div className="rounded-lg border p-4">
-            <h2 className="mb-2 font-semibold">Warnings</h2>
-            <div className="space-y-2">{/* 这里将添加警告信息 */}</div>
+          {/* 侧边栏按钮 */}
+          <div className="flex w-12 flex-col bg-gray-800">
+            <button
+              className={`p-3 hover:bg-gray-700 ${
+                activePanel.right === 'chat' ? 'bg-gray-700' : ''
+              }`}
+              onClick={() => togglePanel('right', 'chat')}
+              aria-label="聊天"
+            >
+              C
+            </button>
+            <button
+              className={`p-3 hover:bg-gray-700 ${
+                activePanel.right === 'progress' ? 'bg-gray-700' : ''
+              }`}
+              onClick={() => togglePanel('right', 'progress')}
+              aria-label="进度"
+            >
+              P
+            </button>
+            <button
+              className={`p-3 hover:bg-gray-700 ${
+                activePanel.right === 'warnings' ? 'bg-gray-700' : ''
+              }`}
+              onClick={() => togglePanel('right', 'warnings')}
+              aria-label="警告"
+            >
+              W
+            </button>
           </div>
         </div>
       </div>
-    </MainLayout>
+    </main>
   );
 }

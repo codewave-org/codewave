@@ -60,7 +60,8 @@ pnpm -r type-check
 pnpm -r build
 
 # 运行测试
-pnpm -r test
+cd packages && pnpm -r test       # 运行包测试（Jest）
+cd ../apps/web && pnpm test -- --run  # 运行 web 应用测试（Vitest）
 ```
 
 ### 类型检查说明
@@ -133,10 +134,12 @@ pnpm -r test
 - 集成测试放在 `tests/` 目录下
 
 #### 测试环境配置
-- 使用 Jest 作为测试框架
+- packages 使用 Jest 作为测试框架
+- web 使用 Vitest 作为测试框架
 - 使用 `@testing-library/react` 进行组件测试
-- 使用 `jest-environment-jsdom` 提供浏览器环境
-- 使用 `ts-jest` 处理 TypeScript 文件
+- 使用 `jest-environment-jsdom` 提供浏览器环境（packages）
+- 使用 `jsdom` 提供浏览器环境（web）
+- 使用 `ts-jest` 处理 TypeScript 文件（packages）
 
 #### 测试示例
 ```typescript
@@ -152,7 +155,7 @@ describe('Component', () => {
     it('handles props correctly', () => {
         const props = {
             value: 'test',
-            onChange: jest.fn()
+            onChange: jest.fn()  // packages 使用 jest.fn()
         };
         render(<Component {...props} />);
         expect(screen.getByText('test')).toBeInTheDocument();
@@ -162,15 +165,21 @@ describe('Component', () => {
 
 #### Mock 示例
 ```typescript
-// Mock 外部模块
+// packages 使用 Jest
 jest.mock('@external/module', () => ({
     ExternalComponent: ({ children, ...props }) => (
         <div data-testid="mock-component" {...props}>{children}</div>
     )
 }));
-
-// Mock 函数
 const mockFn = jest.fn();
+
+// web 使用 Vitest
+vi.mock('@external/module', () => ({
+    ExternalComponent: ({ children, ...props }) => (
+        <div data-testid="mock-component" {...props}>{children}</div>
+    )
+}));
+const mockFn = vi.fn();
 ```
 
 ## 提交规范
@@ -215,7 +224,7 @@ const mockFn = jest.fn();
      - 代码格式检查（prettier）
      - 代码质量检查（eslint）
      - 类型检查（tsc --noEmit）
-     - 单元测试（jest）
+     - 单元测试（Jest for packages, Vitest for web）
 3. 所有检查通过后才能合并到目标分支
 
 ## 注意事项

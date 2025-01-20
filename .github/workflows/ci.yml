@@ -117,10 +117,15 @@ jobs:
       run: |
         poetry run pytest tests/api/ -v
 
-    - name: Run frontend tests
-      working-directory: ./frontend
+    - name: Run Frontend Packages Tests
+      working-directory: frontend
       run: |
-        pnpm -r test
+        pnpm --filter "./packages/**" test
+
+    - name: Run Frontend Web Tests
+      working-directory: frontend/apps/web
+      run: |
+        pnpm test -- --run
 
     - name: Upload backend coverage
       uses: codecov/codecov-action@v3

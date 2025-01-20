@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 
-type PanelType = 'questions' | 'hints' | 'testrun' | 'chat' | 'progress' | 'warnings';
-type PanelSide = 'left' | 'right';
+export type PanelType = 'questions' | 'hints' | 'testrun' | 'chat' | 'progress' | 'warnings';
+export type PanelSide = 'left' | 'right';
 
-interface PanelState {
+export interface PanelState {
   activePanel: {
     left: PanelType | null;
     right: PanelType | null;

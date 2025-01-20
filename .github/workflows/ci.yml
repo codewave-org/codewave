@@ -39,6 +39,21 @@ jobs:
       with:
         version: 8
 
+    # Add pnpm store cache
+    - name: Get pnpm store directory
+      id: pnpm-cache
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
     - name: Install backend dependencies
       working-directory: ./backend
       run: |
@@ -72,16 +87,18 @@ jobs:
       run: |
         pnpm run format:check
 
+    # Build packages before running lint and type checks
+    - name: Build frontend packages
+      working-directory: ./frontend
+      run: |
+        pnpm clean
+        pnpm -r build
+
     - name: Check frontend code quality
       working-directory: ./frontend
       run: |
         pnpm run lint
         pnpm -r type-check
-
-    - name: Build frontend packages
-      working-directory: ./frontend
-      run: |
-        pnpm -r build
 
     - name: Run backend unit tests
       working-directory: ./backend

@@ -92,6 +92,7 @@ jobs:
       working-directory: ./frontend
       run: |
         pnpm clean
+        pnpm install
         pnpm -r build
 
     - name: Check frontend code quality

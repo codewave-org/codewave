@@ -30,7 +30,9 @@ export function MainLayout({ children }: MainLayoutProps) {
     }
 
     const elements = containerRef.current.querySelectorAll<HTMLDivElement>('.split-panel');
-    const visibleElements = Array.from(elements).filter((el: HTMLDivElement) => !el.classList.contains('hidden'));
+    const visibleElements = Array.from(elements).filter(
+      (el: HTMLDivElement) => !el.classList.contains('hidden')
+    );
 
     if (visibleElements.length > 1) {
       const sizes =

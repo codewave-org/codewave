@@ -3,6 +3,7 @@
 import { CodeEditor } from '@/components/editor/CodeEditor';
 import { EditorToolbar } from '@/components/editor/EditorToolbar';
 import { MainLayout } from '@/components/layout/MainLayout';
+import '@/styles/split.css';
 
 export default function Page() {
   return (

@@ -80,3 +80,6 @@ poetry.toml
 
 # Turbo
 .turbo/
+
+# Cursor
+.cursor/
